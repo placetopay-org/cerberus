@@ -1,0 +1,46 @@
+{
+    "name": "placetopay/cerberus",
+    "description": "Allows multiple tenants on Laravel Applications",
+    "authors": [
+        {
+            "name": "Andrés Vidal",
+            "email": "andres.vidal@evertecinc.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "spatie/laravel-multitenancy": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^5.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Placetopay\\Cerberus\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Placetopay\\Cerberus\\Tests\\": "tests"
+        },
+        "classmap": [
+            "tests/database/migrations/landlord"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Placetopay\\Cerberus\\TenancyServiceProvider"
+            ],
+            "aliases": {
+                "Multitenancy": "Spatie\\Multitenancy\\MultitenancyFacade"
+            }
+        }
+    },
+    "scripts": {
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix --config=.php_cs",
+        "test": "vendor/bin/phpunit tests/"
+    }
+}
