@@ -64,12 +64,12 @@ return [
      *
      * Set to `null` to use the default connection.
      */
-    'tenant_database_connection_name' => 'tenant',
+    'tenant_database_connection_name' => null,
 
     /*
      * The connection name to reach the landlord database
      */
-    'landlord_database_connection_name' => 'landlord',
+    'landlord_database_connection_name' => env('DB_LANDLORD_CONNECTION', 'landlord'),
 
     /*
      * This key will be used to bind the current tenant in the container.
