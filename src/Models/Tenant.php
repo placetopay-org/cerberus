@@ -2,13 +2,14 @@
 
 namespace Placetopay\Cerberus\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Placetopay\Cerberus\scopes\appScope;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
 class Tenant extends TenantSpatie
 {
     protected $casts = [
         'database' => 'array',
+        'config' => 'array',
     ];
 
     public function getDatabase(): ?array
@@ -16,8 +17,15 @@ class Tenant extends TenantSpatie
         return $this->database;
     }
 
-    public static function query(): Builder
+    public function getConfig(): ?array
     {
-        return parent::query()->where('app', config('multitenancy.identifier'));
+        return $this->config;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new AppScope());
     }
 }
