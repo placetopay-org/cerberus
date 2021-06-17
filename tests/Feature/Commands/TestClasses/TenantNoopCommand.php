@@ -16,6 +16,9 @@ class TenantNoopCommand extends Command
 
     public function handle()
     {
-        $this->line('Tenant ID is ' . Tenant::current()->id);
+        $tenant = Tenant::current();
+
+        $this->line('Tenant ID is ' . $tenant->id);
+        $this->line('Tenant Config is ' . json_encode($tenant->config));
     }
 }

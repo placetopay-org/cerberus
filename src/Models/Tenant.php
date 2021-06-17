@@ -7,6 +7,8 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
 class Tenant extends TenantSpatie
 {
+    protected $fillable = ['config'];
+
     protected $casts = [
         'config' => 'array',
     ];
