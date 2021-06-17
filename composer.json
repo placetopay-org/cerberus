@@ -1,10 +1,14 @@
 {
     "name": "placetopay/cerberus",
-    "description": "Allows multiple tenants on Laravel Applications",
+    "description": "Allows multiple tenants on Laravel applications",
     "authors": [
         {
             "name": "Andrés Vidal",
             "email": "andres.vidal@evertecinc.com"
+        },
+        {
+            "name": "David Valbuena",
+            "email": "david.valbuena@evertecinc.com"
         }
     ],
     "require": {
