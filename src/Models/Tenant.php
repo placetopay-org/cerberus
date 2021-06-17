@@ -8,7 +8,6 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 class Tenant extends TenantSpatie
 {
     protected $casts = [
-        'database' => 'array',
         'config' => 'array',
     ];
 

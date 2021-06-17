@@ -6,6 +6,7 @@ use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\SwitchTenantDatabaseTask;
+use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
@@ -42,7 +43,7 @@ return [
      */
     'switch_tenant_tasks' => [
         PrefixCacheTask::class,
-        SwitchTenantDatabaseTask::class,
+        SwitchTenantTask::class,
     ],
 
     /*
@@ -64,7 +65,7 @@ return [
      *
      * Set to `null` to use the default connection.
      */
-    'tenant_database_connection_name' => null,
+    'tenant_database_connection_name' => 'tenant',
 
     /*
      * The connection name to reach the landlord database

@@ -15,6 +15,6 @@ class DomainTenantFinder extends TenantFinder
     {
         $host = $request->getHost();
 
-        return $this->getTenantModel()::where('app', config('multitenancy.identifier'))->whereDomain($host)->first();
+        return $this->getTenantModel()::query()->whereDomain($host)->first();
     }
 }
