@@ -23,6 +23,7 @@ class TenantAwareCommandTest extends TestCase
         $this->tenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
+            'domain' => 'co.domain.com',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
@@ -31,6 +32,7 @@ class TenantAwareCommandTest extends TestCase
         $this->anotherTenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
+            'domain' => 'pr.domain.com',
             'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
         ]);
         $this->anotherTenant->makeCurrent();
@@ -51,7 +53,7 @@ class TenantAwareCommandTest extends TestCase
     public function it_prints_the_right_tenant()
     {
         $this
-            ->artisan('tenant:noop --tenant=tenant_1')
+            ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
             ->expectsOutput('Tenant ID is ' . $this->tenant->id);
     }

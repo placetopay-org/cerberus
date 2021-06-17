@@ -29,13 +29,6 @@ return [
     'tenant_finder' => DomainTenantFinder::class,
 
     /*
-     * These fields are used by tenant:artisan command to match one or more tenant
-     */
-    'tenant_artisan_search_fields' => [
-        'name',
-    ],
-
-    /*
      * These tasks will be performed when switching tenants.
      *
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask

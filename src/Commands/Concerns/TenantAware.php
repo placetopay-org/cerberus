@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Commands\Concerns;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,22 +16,26 @@ trait TenantAware
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $tenants = Arr::wrap($this->option('tenant'));
+        $tenant = Arr::wrap($this->option('tenant'));
+        if (empty($tenant)) {
+            $tenant = $this->getTenantModel()::query()->pluck('domain')->toArray();
+        }
 
-        $tenantQuery = $this->getTenantModel()::query()
-            ->when(!blank($tenants), function ($query) use ($tenants) {
-                collect($this->getTenantArtisanSearchFields())
-                    ->each(fn ($field) => $query->whereIn($field, Arr::wrap($tenants)));
-            });
+        $identifier = config('multitenancy.identifier');
 
-        if ($tenantQuery->count() === 0) {
+        $tenants = collect($tenant)->map(
+            fn ($domain) => Cache::tags(["multitenancy_{$identifier}"])->rememberForever("tenant_{$domain}", function () use ($domain) {
+                return $this->getTenantModel()::query()->whereDomain($domain)->first();
+            })
+        )->filter();
+
+        if ($tenants->count() === 0) {
             $this->error('No tenant(s) found.');
 
             return -1;
         }
 
-        return $tenantQuery
-            ->cursor()
+        return $tenants
             ->map(fn ($tenant) => $tenant->execute(fn () => (int)$this->laravel->call([$this, 'handle'])))
             ->sum();
     }
