@@ -21,7 +21,7 @@ class TenantsArtisanCommandTest extends TestCase
         $this->tenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
-            'database' => ['database' => 'laravel_mt_tenant_1'],
+            'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
         $this->tenant->makeCurrent();
 
@@ -30,7 +30,7 @@ class TenantsArtisanCommandTest extends TestCase
         $this->anotherTenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
-            'database' => ['database' => 'laravel_mt_tenant_2'],
+            'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
         ]);
         $this->anotherTenant->makeCurrent();
         Schema::connection('tenant')->dropIfExists('migrations');
@@ -53,11 +53,12 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant()
     {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->name . '"')->assertExitCode(0);
+        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->name . '"')
+            ->assertExitCode(0);
 
         $this
-            ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
-            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
+            ->assertTenantDatabaseDoesNotHaveTable($this->anotherTenant, 'migrations')
+            ->assertTenantDatabaseHasTable($this->tenant, 'migrations');
     }
 
     /** @test */
