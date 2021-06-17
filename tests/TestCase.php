@@ -97,10 +97,10 @@ abstract class TestCase extends Orchestra
     protected function getConfigStructure(string $dbName): array
     {
         return [
-            "database" => [
-                "connections" => [
+            'database' => [
+                'connections' => [
                     config('multitenancy.tenant_database_connection_name') => [
-                        "database" => $dbName,
+                        'database' => $dbName,
                     ],
                 ],
             ],

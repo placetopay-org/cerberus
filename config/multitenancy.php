@@ -5,7 +5,6 @@ use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Models\Tenant;
-use Placetopay\Cerberus\Tasks\SwitchTenantDatabaseTask;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
