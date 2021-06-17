@@ -18,7 +18,7 @@ trait TenantAware
     {
         $tenant = Arr::wrap($this->option('tenant'));
         if (empty($tenant)) {
-            $tenant = $this->getTenantModel()::query()->get('domain')->pluck('domain')->toArray();
+            $tenant = $this->getTenantModel()::query()->pluck('domain')->toArray();
         }
 
         $identifier = config('multitenancy.identifier');
