@@ -57,8 +57,8 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertExitCode(0);
 
         $this
-            ->assertTenantDatabaseDoesNotHaveTable($this->anotherTenant, 'migrations')
-            ->assertTenantDatabaseHasTable($this->tenant, 'migrations');
+            ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
+            ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
     /** @test */
