@@ -3,8 +3,9 @@
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
 use Placetopay\Cerberus\Models\Tenant;
-use Placetopay\Cerberus\Tasks\SwitchTenantDatabaseTask;
+use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\Tests\TestCase;
+use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
 class TenantAwareCommandTest extends TestCase
 {
@@ -18,7 +19,7 @@ class TenantAwareCommandTest extends TestCase
 
         config(['database.default' => 'tenant']);
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
         $this->tenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
