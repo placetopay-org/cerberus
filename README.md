@@ -6,6 +6,16 @@ Because it is a customization, it requires override steps mentioned below for pr
 
 [More information about the package](https://github.com/spatie/laravel-multitenancy/tree/v1).
 
+This package aims to standardize the configuration of the ``tenants`` table of the landlord database, in addition to reducing the number of queries made to the same database by using cache.
+
+## Prerequsites
+- `php7.4+`
+- `Laravel 7.0+`
+
+## Limitations:
+- cache: you need to use a driver that support tags like redis, cache tags are not supported when using the file, dynamodb, or database cache drivers
+- jobs: we recommend use redis or sqs to process queues
+
 ## Installation
 
 This package can be installed via composer:
@@ -28,16 +38,24 @@ php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvide
 php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="migrations"
 ```
 
-## Testing
-
-You'll need to create the following 3 local MySql databases to be able to run the test suite:
-
-- `laravel_mt_landlord`
-- `laravel_mt_tenant_1`
-- `laravel_mt_tenant_2`
-
-You can run the package's tests:
-
-``` bash
-composer test
+### To considers
+The migration of the landlord table in relation to the spatie package was modified, adding a `config` field of json type, 
+with which it's intended to centralize the configuration that is carried out in front of each tenant, 
+in this field you can define the connection to the database using the following structure.
+```
+{
+	"app": {
+		"url": "...",
+		"name": "..."
+	},
+	"database": {
+		"connections": {
+			"mysql": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "tenant_db",
+			}
+		}
+	}
+}
 ```
