@@ -59,3 +59,27 @@ in this field you can define the connection to the database using the following 
 	}
 }
 ```
+the following connection should be added in ``config/database.php``:
+```
+...
+'landlord' => [
+            'driver' => env('DB_LANDLORD_DRIVER', 'mysql'),
+            'url' => env('DB_LANDLORD_URL'),
+            'host' => env('DB_LANDLORD_HOST', '127.0.0.1'),
+            'port' => env('DB_LANDLORD_PORT', '3306'),
+            'database' => env('DB_LANDLORD_DATABASE', 'forge'),
+            'username' => env('DB_LANDLORD_USERNAME', 'forge'),
+            'password' => env('DB_LANDLORD_PASSWORD', ''),
+            'unix_socket' => env('DB_LANDLORD_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+  ...
+```
