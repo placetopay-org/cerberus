@@ -1,4 +1,4 @@
-# An opinionated multitenancy package for Laravel apps
+# Placetopay multitenancy package
 
 This package is based on the first version of package `spatie/laravel-multitenancy/`.
 
