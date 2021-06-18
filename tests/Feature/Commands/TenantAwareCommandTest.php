@@ -5,7 +5,6 @@ namespace Placetopay\Cerberus\Tests\Feature\Commands;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\Tests\TestCase;
-use Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask;
 
 class TenantAwareCommandTest extends TestCase
 {
