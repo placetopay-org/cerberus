@@ -13,11 +13,6 @@ class Tenant extends TenantSpatie
         'config' => 'array',
     ];
 
-    public function getDatabase(): ?array
-    {
-        return $this->database;
-    }
-
     public function getConfig(): ?array
     {
         return $this->config;
