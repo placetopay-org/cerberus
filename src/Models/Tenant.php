@@ -2,7 +2,7 @@
 
 namespace Placetopay\Cerberus\Models;
 
-use Placetopay\Cerberus\scopes\appScope;
+use Placetopay\Cerberus\Scopes\AppScope;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
 class Tenant extends TenantSpatie

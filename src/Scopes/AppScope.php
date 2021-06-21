@@ -1,6 +1,6 @@
 <?php
 
-namespace Placetopay\Cerberus\scopes;
+namespace Placetopay\Cerberus\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
