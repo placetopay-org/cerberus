@@ -9,7 +9,6 @@ use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
 use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
-use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction as SpatieTenantAware;
 
 class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction
 {
@@ -27,7 +26,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
             $queueable = $payload['data']['command'];
 
-            if (! $this->isTenantAware($queueable)) {
+            if (!$this->isTenantAware($queueable)) {
                 return [];
             }
 
@@ -40,7 +39,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     protected function listenForJobsBeingProcessed(): self
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            if (! array_key_exists('tenantDomain', $event->job->payload())) {
+            if (!array_key_exists('tenantDomain', $event->job->payload())) {
                 return;
             }
 
@@ -65,17 +64,16 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
 
     protected function findTenant(JobProcessing $event): Tenant
     {
-        $tenantId = $event->job->payload()['tenantDomain'];
+        $tenantDomain = $event->job->payload()['tenantDomain'];
 
-        if (! $tenantId) {
+        if (!$tenantDomain) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
         }
 
-
-        /** @var \Spatie\Multitenancy\Models\Tenant $tenant */
-        if (! $tenant = $this->getTenantModel()::find($tenantId)) {
+        /** @var \Placetopay\Cerberus\Models\Tenant $tenant */
+        if (!$tenant = $this->getTenantModel()::query()->whereDomain($tenantDomain)->first()) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
@@ -88,7 +86,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     {
         $job = Arr::get(config('multitenancy.queueable_to_job'), get_class($queueable));
 
-        if (! $job) {
+        if (!$job) {
             return $queueable;
         }
 
@@ -98,5 +96,4 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
 
         return $queueable->$job;
     }
-
 }

@@ -26,7 +26,6 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
     public function makeCurrent(Tenant $tenant): void
     {
         $dataMapping = Arr::dot($tenant->config ?? []);
-
         config($dataMapping);
         $this->purgeConnectionDatabase();
     }
