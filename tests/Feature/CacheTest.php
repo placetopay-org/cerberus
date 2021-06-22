@@ -108,9 +108,6 @@ class CacheTest extends TestCase
 
     private function assertHasCache(): void
     {
-        $identifier = config('multitenancy.identifier');
-        $tenantCache = Cache::tags(["multitenancy_{$identifier}"]);
-
-        $this->assertTrue($tenantCache->has("tenant_{$this->tenant->domain}"));
+        $this->assertTrue(Cache::has("tenant_{$this->tenant->domain}"));
     }
 }

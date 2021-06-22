@@ -4,11 +4,11 @@ use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
-use Placetopay\Cerberus\Actions\MakeQueueTenantAwareAction;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
+use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
 use Spatie\Multitenancy\Tasks\PrefixCacheTask;
@@ -34,8 +34,8 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        PrefixCacheTask::class,
         SwitchTenantTask::class,
+        PrefixCacheTask::class,
     ],
 
     /*
