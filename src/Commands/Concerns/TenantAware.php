@@ -21,8 +21,6 @@ trait TenantAware
             $tenant = $this->getTenantModel()::query()->pluck('domain')->toArray();
         }
 
-        $identifier = config('multitenancy.identifier');
-
         $tenants = collect($tenant)->map(
             fn ($domain) => Cache::rememberForever("tenant_{$domain}", function () use ($domain) {
                 return $this->getTenantModel()::query()->whereDomain($domain)->first();
