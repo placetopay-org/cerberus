@@ -1,6 +1,6 @@
 # Placetopay multitenancy package
 
-This package is based on the first version of package `spatie/laravel-multitenancy/`.
+This package is based on the first version of package `spatie/laravel-multitenancy`.
 
 Because it is a customization, it requires override steps mentioned below for proper installation.
 
@@ -13,7 +13,6 @@ This package aims to standardize the configuration of the ``tenants`` table of t
 - `Laravel 7.0+`
 
 ## Limitations:
-- cache: you need to use a driver that support tags like redis, cache tags are not supported when using the file, dynamodb, or database cache drivers
 - jobs: we recommend use redis or sqs to process queues
 
 ## Installation
@@ -59,10 +58,11 @@ in this field you can define the connection to the database using the following 
 	}
 }
 ```
-the following connection should be added in ``config/database.php``:
+You need to create a new connection in ``config/database.php``:
 ```
-...
-'landlord' => [
+'connections' => [
+    ...
+    'landlord' => [
             'driver' => env('DB_LANDLORD_DRIVER', 'mysql'),
             'url' => env('DB_LANDLORD_URL'),
             'host' => env('DB_LANDLORD_HOST', '127.0.0.1'),
@@ -82,4 +82,5 @@ the following connection should be added in ``config/database.php``:
             ]) : [],
         ],
   ...
+  ]
 ```
