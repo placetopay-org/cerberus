@@ -5,6 +5,7 @@ use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Models\Tenant;
+use Placetopay\Cerberus\Tasks\FilesystemSuffixedTask;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
@@ -18,6 +19,15 @@ return [
      * This name identifies the project for a central database that uses multiple tenants.
      */
     'identifier' => env('APP_IDENTIFIER', 'main'),
+
+    /**
+     * Array of drivers that will be suffixed with tenant_name.
+     */
+    'filesystems_disks' => [
+        'local',
+        'public',
+        //s3
+    ],
 
     /*
      * This class is responsible for determining which tenant should be current
@@ -35,6 +45,7 @@ return [
      */
     'switch_tenant_tasks' => [
         SwitchTenantTask::class,
+        FilesystemSuffixedTask::class,
         PrefixCacheTask::class,
     ],
 
