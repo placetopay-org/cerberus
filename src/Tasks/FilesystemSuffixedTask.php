@@ -34,7 +34,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
         $suffix = $tenant->name;
 
         // storage_path()
-        $this->app->useStoragePath($this->originalPaths['storage'] . "/{$suffix}");
+        $this->app->useStoragePath($this->originalPaths['storage'] . "/tenant/{$suffix}");
 
         // asset()
         if ($this->originalPaths['asset_url']) {
