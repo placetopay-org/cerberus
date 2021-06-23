@@ -44,8 +44,8 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        SwitchTenantTask::class,
         FilesystemSuffixedTask::class,
+        SwitchTenantTask::class,
         PrefixCacheTask::class,
     ],
 

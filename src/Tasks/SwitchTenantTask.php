@@ -25,9 +25,7 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     public function makeCurrent(Tenant $tenant): void
     {
-        $dataMapping = Arr::dot($tenant->config ?? []);
-        config($dataMapping);
-
+        $this->setConfig($tenant);
         $this->purgeConnectionDatabase();
     }
 
@@ -53,5 +51,21 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
         }
 
         DB::purge($tenantConnectionName);
+    }
+
+    private function setConfig(Tenant $tenant): void
+    {
+        $rawConfig = $tenant->getRawOriginal('config');
+
+        $keywords = [
+            'keys' => ['%storage_path%'],
+            'values' => [storage_path()],
+        ];
+
+        $newConfig = json_decode(str_replace($keywords['keys'], $keywords['values'], $rawConfig), true);
+
+        $dataMapping = Arr::dot($newConfig ?? []);
+
+        config($dataMapping);
     }
 }
