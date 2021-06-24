@@ -36,12 +36,6 @@ class FilesystemSuffixedTask implements SwitchTenantTask
         // storage_path()
         $this->app->useStoragePath($this->originalPaths['storage'] . "/tenant/{$suffix}");
 
-        // asset()
-        if ($this->originalPaths['asset_url']) {
-            $this->app['config']['app.asset_url'] = ($this->originalPaths['asset_url'] ?? $this->app['config']['app.url']) . "/$suffix";
-            $this->app['url']->setAssetRoot($this->app['config']['app.asset_url']);
-        }
-
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
             /** @var FilesystemAdapter $filesystemDisk */
@@ -59,10 +53,6 @@ class FilesystemSuffixedTask implements SwitchTenantTask
     {
         // storage_path()
         $this->app->useStoragePath($this->originalPaths['storage']);
-
-        // asset()
-        $this->app['config']['app.asset_url'] = $this->originalPaths['asset_url'];
-        $this->app['url']->setAssetRoot($this->app['config']['app.asset_url']);
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
