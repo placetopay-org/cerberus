@@ -49,6 +49,8 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
         if (is_null(config("database.connections.{$tenantConnectionName}"))) {
             throw InvalidConfiguration::tenantConnectionDoesNotExist($tenantConnectionName);
         }
+
+        DB::purge($tenantConnectionName);
     }
 
     private function setConfig(Tenant $tenant): void
