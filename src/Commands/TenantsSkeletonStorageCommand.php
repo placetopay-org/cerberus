@@ -24,18 +24,30 @@ class TenantsSkeletonStorageCommand extends Command
 
         $domain = Tenant::current()->domain;
 
-        $path = storage_path('app/public');
-        if (File::exists($path)) {
-            $this->info("[Tenant: {$domain}] No folder to create.");
-            return 0;
+        $paths = [
+            'app/public',
+            'framework/cache',
+            'framework/sessions',
+            'framework/testing',
+            'framework/views',
+        ];
+
+        foreach ($paths as $originalPath) {
+            $path = storage_path($originalPath);
+
+            if (File::exists($path)) {
+                $this->info("[Tenant: {$domain}] No folder to create.");
+                continue;
+            }
+
+            if (File::makeDirectory($path, 0755, true)) {
+                $this->info("[Tenant: {$domain}] {$path} folder created.");
+                continue;
+            }
+
+            $this->alert("[Tenant: {$domain}] {$path} folder could not be created.");
         }
 
-        if (File::makeDirectory($path, 0755, true)) {
-            $this->info("[Tenant: {$domain}] {$path} folder created.");
-            return 0;
-        }
-
-        $this->info("[Tenant: {$domain}] {$path} folder could not be created.");
-        return 1;
+        return 0;
     }
 }
