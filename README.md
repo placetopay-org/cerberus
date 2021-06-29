@@ -37,6 +37,13 @@ php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvide
 php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="migrations"
 ```
 
+### Create storage folder by tenancy
+This is allowed to run only if the application has the configuration variable **multitenancy.suffix_storage_path** set to true.
+
+``` bash
+php artisan tenants:skeleton-storage --tenant=*
+```
+
 ### To considers
 The migration of the landlord table in relation to the spatie package was modified, adding a `config` field of json type, 
 with which it's intended to centralize the configuration that is carried out in front of each tenant, 

@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus;
 
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
 use Placetopay\Cerberus\Commands\TenantsListCommand;
+use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
@@ -13,6 +14,7 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
         $this->commands([
             TenantsArtisanCommand::class,
             TenantsListCommand::class,
+            TenantsSkeletonStorageCommand::class,
         ]);
 
         return $this;
