@@ -58,4 +58,20 @@ class FilesystemSuffixedTaskTest extends TestCase
 
         $this->assertStringNotContainsString($this->anotherTenant->name, Storage::path('tests'));
     }
+
+    /** @test */
+    public function it_overwrite_storage_path()
+    {
+        config()->set('multitenancy.suffix_storage_path', true);
+        $originalStoragePath = storage_path();
+
+        $this->assertStringNotContainsString($this->tenant->name, $originalStoragePath);
+
+        $this->tenant->makeCurrent();
+        $this->assertStringContainsString($this->tenant->name, storage_path());
+        $this->tenant->forget();
+
+        $this->assertEquals($originalStoragePath, storage_path());
+        $this->assertStringNotContainsString($this->tenant->name, $originalStoragePath);
+    }
 }

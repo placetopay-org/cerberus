@@ -31,10 +31,12 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
     public function makeCurrent(Tenant $tenant): void
     {
-        $suffix = $tenant->name;
+        $suffix = "tenants/$tenant->name";
 
         // storage_path()
-        //$this->app->useStoragePath($this->originalPaths['storage'] . "/tenant/{$suffix}");
+        if (config('multitenancy.suffix_storage_path')) {
+            $this->app->useStoragePath($this->originalPaths['storage'] . "/{$suffix}");
+        }
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
@@ -52,7 +54,9 @@ class FilesystemSuffixedTask implements SwitchTenantTask
     public function forgetCurrent(): void
     {
         // storage_path()
-        //$this->app->useStoragePath($this->originalPaths['storage']);
+        if (config('multitenancy.suffix_storage_path')) {
+            $this->app->useStoragePath($this->originalPaths['storage']);
+        }
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {

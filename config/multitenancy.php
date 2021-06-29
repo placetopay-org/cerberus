@@ -29,6 +29,15 @@ return [
         //s3
     ],
 
+    /**
+     * suffix storage_path
+     * Note: Disable this if you're using an external file storage service like S3.
+     *
+     * If you need to overwrite the storage_path() you must ensure that you have the folder structure for the application
+     * cache storage in the storage folder, you can create this structure by executing the command ...
+     */
+    'suffix_storage_path' => false,
+
     /*
      * This class is responsible for determining which tenant should be current
      * for the given request.
