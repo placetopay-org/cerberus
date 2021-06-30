@@ -98,7 +98,7 @@ php artisan migrate --database=landlord --path=database/migrations/laandlord/
 ````
 
 ### Jobs
-You need to update the connection and tables for jobs and failed_jobs:
+You need to update the connection and tables for jobs and failed_jobs, ``config/queue.php``:
 ```
 [
 //...
@@ -126,13 +126,11 @@ You need to update the connection and tables for jobs and failed_jobs:
 
 ### Storage
 This package will overwrite the Storage Facade by default, setting a tenant's name as a prefix for folders that use 
-with Storage Facade, if you need to suffix the 'storage_path()' method too, you need to set to true the variable 
+with Storage Facade, if you need to suffix the ``storage_path()`` method too, you need to set to true the variable 
 ``suffix_storage_path`` in ``config/multitenant.php`` file.
 
 ### How change the commands
 To execute any command for one tenant you need to execute the next command structure
 ```php artisan tenants:artisan "command:execute" --tenant={tenant_domain} ```
 
-Addig the ``--tenant={tenant_domain}`` flag, will be execute the commando only for the specific tenant, without this it will execute by each tenant
-
-### testing
+Addig the ``--tenant={tenant_domain}`` flag, will be executed the commando only for the specific tenant, without this it will execute by each tenant.
