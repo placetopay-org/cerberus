@@ -106,3 +106,11 @@ php artisan migrate --database=landlord --path=database/migrations/laandlord/
 ````
 
 ### Jobs
+
+
+### Storage
+This package will overwrite the Storage Facade by default, setting a tenant's name as a prefix for folders that use 
+with Storage Facade, if you need to suffix the 'storage_path()' method too, you need to set to true the variable 
+``suffix_storage_path`` in ``config/multitenant.php`` file.
+
+### How change the commands
