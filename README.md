@@ -12,9 +12,6 @@ This package aims to standardize the configuration of the ``tenants`` table of t
 - `php7.4+`
 - `Laravel 7.0+`
 
-## Limitations:
-- jobs: we recommend use redis or sqs to process queues
-
 ## Installation
 
 This package can be installed via composer:
@@ -44,28 +41,10 @@ This is allowed to run only if the application has the configuration variable **
 php artisan tenants:skeleton-storage --tenant=*
 ```
 
-### To considers
-The migration of the landlord table in relation to the spatie package was modified, adding a `config` field of json type, 
-with which it's intended to centralize the configuration that is carried out in front of each tenant, 
-in this field you can define the connection to the database using the following structure.
-```
-{
-	"app": {
-		"url": "...",
-		"name": "..."
-	},
-	"database": {
-		"connections": {
-			"mysql": {
-				"host": "localhost",
-				"port": "3306",
-				"database": "tenant_db",
-			}
-		}
-	}
-}
-```
-You need to create a new connection in ``config/database.php``:
+## How to use
+After publish the config and migrations files, you need to create a new connection in ``config/database.php``,
+This connection will allow the management of the landlord database, in which the tenants of the application will be stored.
+
 ```
 'connections' => [
     ...
@@ -91,3 +70,39 @@ You need to create a new connection in ``config/database.php``:
   ...
   ]
 ```
+
+The migration of the landlord table in relation to the spatie package was modified, adding a `config` field of json type, 
+with which it's intended to centralize the configuration that is carried out in front of each tenant, 
+in this field you can define the connection to the database using the following structure.
+```JSON
+{
+  "app": {
+    "url": "...", 
+    "name": "..."
+  }, 
+  "database": {
+    "connections": {
+      "mysql": {
+        "host": "...", 
+        "port": "...", 
+        "database": "...", 
+        "username": "..."
+      }
+    }
+  }
+}
+```
+You can add all configurations that you needed, this json will be convert in array dot structure
+and then will be set in the laravel config.
+
+Additionally, the variable ``APP_IDENTIFIER`` is provided in the file ``config/multitenancy.php`` which will be the project identifier
+
+### Execute migrations
+
+To execute the migrations of the landlord database, it's necessary to specify the connection and the path 
+to the folder where the migrations are located:
+```` 
+php artisan migrate --database=landlord --path=database/migrations/laandlord/ 
+````
+
+### Jobs

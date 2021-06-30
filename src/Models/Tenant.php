@@ -5,6 +5,13 @@ namespace Placetopay\Cerberus\Models;
 use Placetopay\Cerberus\Scopes\AppScope;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
+/**
+ * Class Tenant
+ * @property string name
+ * @property string app
+ * @property string domain
+ * @property array config
+ */
 class Tenant extends TenantSpatie
 {
     protected $fillable = ['config'];
