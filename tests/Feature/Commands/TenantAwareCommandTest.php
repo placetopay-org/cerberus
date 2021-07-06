@@ -3,7 +3,7 @@
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
 use Placetopay\Cerberus\Models\Tenant;
-use Placetopay\Cerberus\Tasks\SwitchTenantDatabaseTask;
+use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\Tests\TestCase;
 
 class TenantAwareCommandTest extends TestCase
@@ -18,12 +18,13 @@ class TenantAwareCommandTest extends TestCase
 
         config(['database.default' => 'tenant']);
 
-        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantDatabaseTask::class]);
+        config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
         $this->tenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
-            'database' => ['database' => 'laravel_mt_tenant_1'],
+            'domain' => 'co.domain.com',
+            'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
         $this->tenant->makeCurrent();
@@ -31,7 +32,8 @@ class TenantAwareCommandTest extends TestCase
         $this->anotherTenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
-            'database' => ['database' => 'laravel_mt_tenant_2'],
+            'domain' => 'pr.domain.com',
+            'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
         ]);
         $this->anotherTenant->makeCurrent();
 
@@ -51,7 +53,7 @@ class TenantAwareCommandTest extends TestCase
     public function it_prints_the_right_tenant()
     {
         $this
-            ->artisan('tenant:noop --tenant=tenant_1')
+            ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
             ->expectsOutput('Tenant ID is ' . $this->tenant->id);
     }

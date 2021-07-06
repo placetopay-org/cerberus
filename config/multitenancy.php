@@ -5,7 +5,8 @@ use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Models\Tenant;
-use Placetopay\Cerberus\Tasks\SwitchTenantDatabaseTask;
+use Placetopay\Cerberus\Tasks\FilesystemSuffixedTask;
+use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
@@ -19,6 +20,24 @@ return [
      */
     'identifier' => env('APP_IDENTIFIER', 'main'),
 
+    /**
+     * Array of drivers that will be suffixed with tenant_name.
+     */
+    'filesystems_disks' => [
+        'local',
+        'public',
+        //s3
+    ],
+
+    /**
+     * suffix storage_path
+     * Note: Disable this if you're using an external file storage service like S3.
+     *
+     * If you need to overwrite the storage_path() you must ensure that you have the folder structure for the application
+     * cache storage in the storage folder, you can create this structure by executing the command ...
+     */
+    'suffix_storage_path' => false,
+
     /*
      * This class is responsible for determining which tenant should be current
      * for the given request.
@@ -29,20 +48,14 @@ return [
     'tenant_finder' => DomainTenantFinder::class,
 
     /*
-     * These fields are used by tenant:artisan command to match one or more tenant
-     */
-    'tenant_artisan_search_fields' => [
-        'name',
-    ],
-
-    /*
      * These tasks will be performed when switching tenants.
      *
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
+        FilesystemSuffixedTask::class,
+        SwitchTenantTask::class,
         PrefixCacheTask::class,
-        SwitchTenantDatabaseTask::class,
     ],
 
     /*
@@ -69,7 +82,7 @@ return [
     /*
      * The connection name to reach the landlord database
      */
-    'landlord_database_connection_name' => 'landlord',
+    'landlord_database_connection_name' => env('DB_LANDLORD_CONNECTION', 'landlord'),
 
     /*
      * This key will be used to bind the current tenant in the container.
@@ -86,7 +99,6 @@ return [
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
         'migrate_tenant' => MigrateTenantAction::class,
     ],
-
     /*
      * You can customize the way in which the package resolves the queuable to a job.
      *

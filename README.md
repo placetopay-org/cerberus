@@ -1,25 +1,170 @@
-# An opinionated multitenancy package for Laravel apps
+# Placetopay multitenancy package
 
-This package can make a Laravel app tenant aware. The philosophy of this package is that it should only provide the bare essentials to enable multitenancy.
+This package is based on the first version of package `spatie/laravel-multitenancy`.
 
-The package can determine which tenant should be the current tenant for the request. It also allows you to define what should happen when switching the current tenant to another one. It works for multitenancy projects that need to use one or multiple databases.
+Because it is a customization, it requires override steps mentioned below for proper installation.
 
-Before starting with the package, we highly recommend first watching [this talk by Tom Schlick on multitenancy strategies](https://tomschlick.com/2017/07/25/laracon-2017-multi-tenancy-talk/).
+[More information about the package](https://github.com/spatie/laravel-multitenancy/tree/v1).
 
-The package contains a lot of niceties such as making queued jobs tenant aware, making an artisan command run for each tenant, an easy way to set a connection on a model, and much more.
+This package aims to standardize the configuration of the ``tenants`` table of the landlord database, in addition to reducing the number of queries made to the same database by using cache.
 
-Are you a visual learner? Then watch [this video](https://spatie.be/videos/laravel-package-training/laravel-multitenancy) that covers how you can use laravel-multitenancy and how it works under the hood.
+## Prerequsites
+- `php7.4+`
+- `Laravel 7.0+`
 
-## Testing
+## Installation
 
-You'll need to create the following 3 local MySql databases to be able to run the test suite:
-
-- `laravel_mt_landlord`
-- `laravel_mt_tenant_1`
-- `laravel_mt_tenant_2`
-
-You can run the package's tests:
+This package can be installed via composer:
 
 ``` bash
-composer test
+composer require "placetopay/cerberus:^1.0"
+```
+
+### Publishing the config file
+
+You must publish the config file:
+
+``` bash
+php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="config"
+```
+
+### Publishing the migrate file
+
+``` bash
+php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="migrations"
+```
+
+### Create storage folder by tenancy
+This is allowed to run only if the application has the configuration variable **multitenancy.suffix_storage_path** set to true.
+
+``` bash
+php artisan tenants:skeleton-storage --tenant=*
+```
+
+## How to use
+After publish the config and migrations files, you need to create a new connection in ``config/database.php``,
+This connection will allow the management of the landlord database, in which the tenants of the application will be stored.
+
+```
+'connections' => [
+    ...
+    'landlord' => [
+        'driver' => env('DB_LANDLORD_DRIVER', 'mysql'),
+        'url' => env('DB_LANDLORD_URL'),
+        'host' => env('DB_LANDLORD_HOST', '127.0.0.1'),
+        'port' => env('DB_LANDLORD_PORT', '3306'),
+        'database' => env('DB_LANDLORD_DATABASE', 'forge'),
+        'username' => env('DB_LANDLORD_USERNAME', 'forge'),
+        'password' => env('DB_LANDLORD_PASSWORD', ''),
+        'unix_socket' => env('DB_LANDLORD_SOCKET', ''),
+        //...
+    ],
+  ...
+]
+```
+
+The migration of the landlord table in relation to the spatie package was modified, adding a `config` field of json type, 
+with which it's intended to centralize the configuration that is carried out in front of each tenant, 
+in this field you can define the connection to the database using the following structure.
+```JSON
+{
+  "app": {
+    "url": "...", 
+    "name": "..."
+  }, 
+  "database": {
+    "connections": {
+      "mysql": {
+        "host": "...", 
+        "port": "...", 
+        "database": "...", 
+        "username": "..."
+      }
+    }
+  }
+}
+```
+You can add all configurations that you needed, this json will be convert in array dot structure
+and then will be set in the laravel config. 
+
+Additionally, the variable ``APP_IDENTIFIER`` is provided in the file ``config/multitenancy.php`` which will be the project identifier
+
+### Execute migrations
+
+To execute the migrations of the landlord database, it's necessary to specify the connection and the path 
+to the folder where the migrations are located:
+```` 
+php artisan migrate --database=landlord --path=database/migrations/laandlord/ 
+````
+
+### Jobs
+You need to update the connection and tables for jobs and failed_jobs, ``config/queue.php``:
+```
+[
+//...
+'connections' => [
+    'database' => [
+        'connection' => env('DB_LANDLORD_CONNECTION'),
+        'driver' => 'database',
+        'table' => '{project_identifier}_jobs',
+        'queue' => 'default',
+        'retry_after' => 90,
+        'after_commit' => false,
+    ],
+    //...
+]
+//...
+]
+
+//...
+'failed' => [
+    'driver' => env('QUEUE_FAILED_DRIVER', 'database'),
+    'database' => env('DB_LANDLORD_CONNECTION', 'landlord'),
+    'table' => '{project_identifier}_failed_jobs',
+],
+```
+
+### Storage
+This package will overwrite the Storage Facade by default, setting a tenant's name as a prefix for folders that use 
+with Storage Facade, if you need to suffix the ``storage_path()`` method too, you need to set to true the variable 
+``suffix_storage_path`` in ``config/multitenant.php`` file.
+
+### How change the commands
+To execute any command for one tenant you need to execute the next command structure
+```php artisan tenants:artisan "command:execute" --tenant={tenant_domain} ```
+
+Addig the ``--tenant={tenant_domain}`` flag, will be executed the commando only for the specific tenant, without this it will execute by each tenant.
+
+### translatable attributes
+
+You can use the translate method in the tenant model to translate some keys from the config JSON. 
+This method uses the app locale and fallback to search the correct values from the JSON, 
+addionaly you should use a ``config/tenant.php`` file to set default values for translations in case if doesn't 
+exist in the JSON data:
+
+Json data from database
+```json 
+{
+    "tenant": {
+        "terms_and_privacy": {
+            "es_CO": "Al continuar acepto la  <a class='underline' target='_blank' href='https: //www.placetopay.com/web/politicas-de-privacidad'> política de protección</a> de datos personales de <strong>Empresas del Grupo Evertec y sus filiales y subsidiarias</strong>"
+        }
+    }
+}
+```
+
+Default values in ``config/tenant.php``:
+```
+return [
+'terms_and_privacy' => [
+        'en' => sprintf('By continuing, you accept the <a class="underline" target="_blank" href="%s"> personal data protection policy </a> of <strong>Companies of the Evertec Group and its affiliates and subsidiaries</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+        'it' => sprintf('Continuando ad accettare la <a class="underline" target="_blank" href="%s"> politica di protezione dei dati personali </a> di <strong>Società del Gruppo Evertec e delle sue affiliate e sussidiarie</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+        'pt' => sprintf('Ao continuar, você aceita a <a class="underline" target="_blank" href="%s"> política de proteção de dados pessoais </a> da <strong>Empresas do Grupo Evertec e suas afiliadas e subsidiárias</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+    ],
+]
+```
+
+Example of use:
+```
+app('currentTenant')->translate('terms_and_privacy')
 ```

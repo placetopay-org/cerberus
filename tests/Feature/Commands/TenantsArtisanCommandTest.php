@@ -21,7 +21,8 @@ class TenantsArtisanCommandTest extends TestCase
         $this->tenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
-            'database' => ['database' => 'laravel_mt_tenant_1'],
+            'domain' => 'co.domain.com',
+            'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
         $this->tenant->makeCurrent();
 
@@ -30,7 +31,8 @@ class TenantsArtisanCommandTest extends TestCase
         $this->anotherTenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
-            'database' => ['database' => 'laravel_mt_tenant_2'],
+            'domain' => 'pr.domain.com',
+            'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
         ]);
         $this->anotherTenant->makeCurrent();
         Schema::connection('tenant')->dropIfExists('migrations');
@@ -53,7 +55,8 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant()
     {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->name . '"')->assertExitCode(0);
+        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')
+            ->assertExitCode(0);
 
         $this
             ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')
@@ -63,8 +66,6 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
     {
-        config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
-
         $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->name . '"')
             ->expectsOutput('No tenant(s) found.');
     }
@@ -72,8 +73,6 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant_by_domain()
     {
-        config(['multitenancy.tenant_artisan_search_fields' => 'domain']);
-
         $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')->assertExitCode(0);
 
         $this

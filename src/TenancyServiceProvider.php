@@ -3,6 +3,8 @@
 namespace Placetopay\Cerberus;
 
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
+use Placetopay\Cerberus\Commands\TenantsListCommand;
+use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
@@ -11,6 +13,8 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
     {
         $this->commands([
             TenantsArtisanCommand::class,
+            TenantsListCommand::class,
+            TenantsSkeletonStorageCommand::class,
         ]);
 
         return $this;
@@ -30,6 +34,8 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
         if (!class_exists('CreateLandlordTenantsTable')) {
             $this->publishes([
                 __DIR__ . '/../database/migrations/landlord/create_landlord_tenants_table.php.stub' => database_path('migrations/landlord/' . date('Y_m_d_His', time()) . '_create_landlord_tenants_table.php'),
+                __DIR__ . '/../database/migrations/landlord/create_landlord_jobs_table.php.stub' => database_path('migrations/landlord/' . date('Y_m_d_His', time()) . '_create_landlord_jobs_table.php'),
+                __DIR__ . '/../database/migrations/landlord/create_landlord_failed_jobs_table.php.stub' => database_path('migrations/landlord/' . date('Y_m_d_His', time()) . '_create_landlord_failed_jobs_table.php'),
             ], 'migrations');
         }
 

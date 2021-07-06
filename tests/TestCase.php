@@ -93,4 +93,17 @@ abstract class TestCase extends Orchestra
             'connection' => 'landlord',
         ]);
     }
+
+    protected function getConfigStructure(string $dbName): array
+    {
+        return [
+            'database' => [
+                'connections' => [
+                    config('multitenancy.tenant_database_connection_name') => [
+                        'database' => $dbName,
+                    ],
+                ],
+            ],
+        ];
+    }
 }
