@@ -134,3 +134,37 @@ To execute any command for one tenant you need to execute the next command struc
 ```php artisan tenants:artisan "command:execute" --tenant={tenant_domain} ```
 
 Addig the ``--tenant={tenant_domain}`` flag, will be executed the commando only for the specific tenant, without this it will execute by each tenant.
+
+### translatable attributes
+
+You can use the translate method in the tenant model to translate some keys from the config JSON. 
+This method uses the app locale and fallback to search the correct values from the JSON, 
+addionaly you should use a ``config/tenant.php`` file to set default values for translations in case if doesn't 
+exist in the JSON data:
+
+Json data from database
+```json 
+{
+    "tenant": {
+        "terms_and_privacy": {
+            "es_CO": "Al continuar acepto la  <a class='underline' target='_blank' href='https: //www.placetopay.com/web/politicas-de-privacidad'> política de protección</a> de datos personales de <strong>Empresas del Grupo Evertec y sus filiales y subsidiarias</strong>"
+        }
+    }
+}
+```
+
+Default values in ``config/tenant.php``:
+```
+return [
+'terms_and_privacy' => [
+        'en' => sprintf('By continuing, you accept the <a class="underline" target="_blank" href="%s"> personal data protection policy </a> of <strong>Companies of the Evertec Group and its affiliates and subsidiaries</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+        'it' => sprintf('Continuando ad accettare la <a class="underline" target="_blank" href="%s"> politica di protezione dei dati personali </a> di <strong>Società del Gruppo Evertec e delle sue affiliate e sussidiarie</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+        'pt' => sprintf('Ao continuar, você aceita a <a class="underline" target="_blank" href="%s"> política de proteção de dados pessoais </a> da <strong>Empresas do Grupo Evertec e suas afiliadas e subsidiárias</strong>', 'https://www.placetopay.com/web/politicas-de-privacidad'),
+    ],
+]
+```
+
+Example of use:
+```
+app('currentTenant')->translate('terms_and_privacy')
+```
