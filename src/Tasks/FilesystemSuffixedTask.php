@@ -40,6 +40,11 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
+
+            if(!$this->canSuffixS3Driver($disk)) {
+                continue;
+            }
+
             /** @var FilesystemAdapter $filesystemDisk */
             if ($filesystemDisk = Storage::disk($disk)) {
                 $this->originalPaths['disks'][$disk] = $filesystemDisk->getAdapter()->getPathPrefix();
@@ -68,5 +73,15 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             $filesystemDisk->getAdapter()->setPathPrefix($root);
             $this->app['config']["filesystems.disks.{$disk}.root"] = $root;
         }
+    }
+
+
+    public function canSuffixS3Driver (string $driver):bool
+    {
+        if ($driver == 's3' && config('filesystems.disks.s3.region') !== null) {
+            return false;
+        }
+
+        return true;
     }
 }

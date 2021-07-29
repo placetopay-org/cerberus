@@ -8,13 +8,15 @@ class CreateLandlordTenantsTable extends Migration
 {
     public function up()
     {
-        Schema::create('tenants', function (Blueprint $table) {
-            $table->id();
-            $table->string('app', 10);
-            $table->string('name');
-            $table->string('domain')->unique();
-            $table->json('config')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::connection(config('multitenancy.landlord_database_connection_name'))->hasTable('tenants')) {
+            Schema::create('tenants', function (Blueprint $table) {
+                $table->id();
+                $table->string('app', 10);
+                $table->string('name');
+                $table->string('domain')->unique();
+                $table->json('config')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 }
