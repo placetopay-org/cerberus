@@ -40,8 +40,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
-
-            if(!$this->canSuffixS3Driver($disk)) {
+            if (!$this->canSuffixS3Driver($disk)) {
                 continue;
             }
 
@@ -75,10 +74,9 @@ class FilesystemSuffixedTask implements SwitchTenantTask
         }
     }
 
-
-    public function canSuffixS3Driver (string $driver):bool
+    public function canSuffixS3Driver(string $driver): bool
     {
-        if ($driver == 's3' && config('filesystems.disks.s3.region') !== null) {
+        if ($driver == 's3' && config('filesystems.disks.s3.region') == null) {
             return false;
         }
 
