@@ -1,6 +1,7 @@
 {
     "name": "placetopay/cerberus",
     "description": "Allows multiple tenants on Laravel applications",
+    "license": "MIT",
     "authors": [
         {
             "name": "Andrés Vidal",
