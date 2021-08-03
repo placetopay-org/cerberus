@@ -1,29 +1,14 @@
 <?php
 
-namespace Placetopay\Cerberus\Tests\Unit;
+namespace Placetopay\Cerberus\Tests\Unit\Middlewares;
 
 use Illuminate\Http\Request;
 use Placetopay\Cerberus\Http\Exceptions\UnAuthorizedActionException;
-use Placetopay\Cerberus\Http\Middlewares\AppCache;
+use Placetopay\Cerberus\Http\Middlewares\AppCleanCache;
 use Placetopay\Cerberus\Tests\TestCase;
 
-class AppCacheMiddlewareTest extends TestCase
+class AppCleanCacheTest extends TestCase
 {
-    /** @test */
-    public function it_can_access_to_clean_cache_ok()
-    {
-        config(['multitenancy.cache_middleware_key' => 'app-key123234']);
-
-        $data = [
-            'key' => config('multitenancy.cache_middleware_key'),
-        ];
-        $this->get(route('app.clean', $data))
-            ->assertOk()
-            ->assertJson([
-                'message' => 'cache cleared',
-            ]);
-    }
-
     /** @test */
     public function conf_key_is_not_configured()
     {
@@ -31,7 +16,7 @@ class AppCacheMiddlewareTest extends TestCase
 
         $request = new Request();
 
-        $middleware = (new AppCache());
+        $middleware = (new AppCleanCache());
         $this->expectException(UnAuthorizedActionException::class);
         $this->expectExceptionMessage($middleware::EMPTY_CONFIG_KEY);
         $middleware->handle($request, fn ($request) => $request);
@@ -43,7 +28,7 @@ class AppCacheMiddlewareTest extends TestCase
         config(['multitenancy.cache_middleware_key' => 'app-key123234']);
         $request = new Request();
 
-        $middleware = (new AppCache());
+        $middleware = (new AppCleanCache());
         $this->expectException(UnAuthorizedActionException::class);
         $this->expectExceptionMessage($middleware::UN_AUTHORIZED);
         $middleware->handle($request, fn ($request) => $request);

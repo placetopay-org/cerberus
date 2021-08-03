@@ -5,7 +5,7 @@ namespace Placetopay\Cerberus\Http\Middlewares;
 use Closure;
 use Placetopay\Cerberus\Http\Exceptions\UnAuthorizedActionException;
 
-class AppCache
+class AppCleanCache
 {
     public const EMPTY_CONFIG_KEY = "You must configure the variable 'multitenancy.cache_middleware_key' to perform this action";
     public const UN_AUTHORIZED = 'You are not authorized to perform this action';
