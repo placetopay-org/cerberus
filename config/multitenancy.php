@@ -114,5 +114,6 @@ return [
 
     /**
      * You need to set up this key to use in the middleware to validate when someone application wants to clear cache remotely.
+     */
     'middleware_key' => '',
 ];
