@@ -38,7 +38,7 @@ class AppCleanCacheTest extends TestCase
 
     private function getSignature($key): string
     {
-        config(['multitenancy.cache_middleware_key' => $key]);
+        config(['multitenancy.middleware_key' => $key]);
 
         $data = [
             'action' => 'cache:clear',

@@ -12,7 +12,7 @@ class TenantControllerTest extends TestCase
     public function it_can_access_to_clean_cache_ok()
     {
         $key = 'app-key123234';
-        config(['multitenancy.cache_middleware_key' => $key]);
+        config(['multitenancy.middleware_key' => $key]);
 
         $data = [
             'action' => 'cache:clear',

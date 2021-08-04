@@ -12,12 +12,12 @@ class AppCleanCache
         'cache:clear',
     ];
 
-    public const EMPTY_CONFIG_KEY = "You must configure the variable 'multitenancy.cache_middleware_key' to perform this action";
+    public const EMPTY_CONFIG_KEY = "You must configure the variable 'multitenancy.middleware_key' to perform this action";
     public const UN_AUTHORIZED = 'You are not authorized to perform this action';
 
     public function handle(Request $request, Closure $next)
     {
-        if (!config('multitenancy.cache_middleware_key')) {
+        if (!config('multitenancy.middleware_key')) {
             $this->unAuthorized(self::EMPTY_CONFIG_KEY);
         }
 
@@ -34,7 +34,7 @@ class AppCleanCache
             'action' => $request->input('action'),
         ];
 
-        $signature = hash_hmac('sha256', json_encode($data), config('multitenancy.cache_middleware_key'));
+        $signature = hash_hmac('sha256', json_encode($data), config('multitenancy.middleware_key'));
 
         return $signature == $request->header('Signature');
     }
@@ -49,6 +49,6 @@ class AppCleanCache
 
     private function allowedAction(Request $request): bool
     {
-        return in_array($request->input('action'), $this->$allowedActions);
+        return in_array($request->input('action'), $this->allowedActions);
     }
 }
