@@ -2,9 +2,12 @@
 
 namespace Placetopay\Cerberus;
 
+use Illuminate\Routing\Router;
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
 use Placetopay\Cerberus\Commands\TenantsListCommand;
 use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
+use Placetopay\Cerberus\Http\Controllers\TenantController;
+use Placetopay\Cerberus\Http\Middlewares\AppCleanCache;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
@@ -18,6 +21,14 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
         ]);
 
         return $this;
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('clean-cache', AppCleanCache::class);
+        $this->app['router']->post('/clean-cache', ['uses' =>  TenantController::class . '@clean', 'as' => 'app.clean']);
     }
 
     public function register(): void
