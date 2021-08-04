@@ -8,7 +8,7 @@ use Placetopay\Cerberus\Http\Exceptions\UnAuthorizedActionException;
 
 class AppCleanCache
 {
-    protected $allowActions = [
+    protected array $allowedActions = [
         'cache:clear',
     ];
 
@@ -49,6 +49,6 @@ class AppCleanCache
 
     private function allowedAction(Request $request): bool
     {
-        return in_array($request->input('action'), $this->allowActions);
+        return in_array($request->input('action'), $this->$allowedActions);
     }
 }
