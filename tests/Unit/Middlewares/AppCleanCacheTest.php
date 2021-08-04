@@ -12,7 +12,7 @@ class AppCleanCacheTest extends TestCase
     /** @test */
     public function conf_key_is_not_configured()
     {
-        config(['multitenancy.cache_middleware_key' => '']);
+        $signature = $this->getSignature('');
 
         $request = new Request();
 
@@ -25,12 +25,25 @@ class AppCleanCacheTest extends TestCase
     /** @test */
     public function it_can_not_authenticate()
     {
-        config(['multitenancy.cache_middleware_key' => 'app-key123234']);
+        $signature = $this->getSignature('app-key123234');
+
         $request = new Request();
+        $request->headers->set('Signature', $signature);
 
         $middleware = (new AppCleanCache());
         $this->expectException(UnAuthorizedActionException::class);
         $this->expectExceptionMessage($middleware::UN_AUTHORIZED);
         $middleware->handle($request, fn ($request) => $request);
+    }
+
+    private function getSignature($key): string
+    {
+        config(['multitenancy.cache_middleware_key' => $key]);
+
+        $data = [
+            'action' => 'cache:clear',
+        ];
+
+        return hash_hmac('sha256', json_encode($data), $key);
     }
 }
