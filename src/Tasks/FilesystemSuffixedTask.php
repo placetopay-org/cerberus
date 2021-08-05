@@ -64,6 +64,11 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
+
+            if (!$this->canSuffixS3Driver($disk)) {
+                continue;
+            }
+
             /** @var FilesystemAdapter $filesystemDisk */
             $filesystemDisk = Storage::disk($disk);
 
