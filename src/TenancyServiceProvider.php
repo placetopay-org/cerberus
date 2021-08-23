@@ -2,13 +2,26 @@
 
 namespace Placetopay\Cerberus;
 
+use Illuminate\Support\Facades\Event;
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
 use Placetopay\Cerberus\Commands\TenantsListCommand;
 use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
+use Placetopay\Cerberus\Listeners\SetLoggerContext;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
 {
+    public function boot()
+    {
+        parent::boot();
+
+        Event::listen(
+            MadeTenantCurrentEvent::class,
+            [SetLoggerContext::class, 'handle']
+        );
+    }
+
     protected function bootCommands(): self
     {
         $this->commands([
