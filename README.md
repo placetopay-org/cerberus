@@ -168,3 +168,23 @@ Example of use:
 ```
 app('currentTenant')->translate('terms_and_privacy')
 ```
+
+### Clear cache remotely
+Probably you need to clear the app cache when you update the tenant information, 
+to do this Cerberus publish a new POST route `clean-cache` that you can call from another application.
+
+this route use middleware to validate if the application can be connected, this is an example of how you need to make the request 
+
+```
+$data = [
+    'action' => 'cache:clear', //allowed action to perform
+];
+
+$signature = hash_hmac('sha256', json_encode($data), config('multitenancy.middleware_key'));
+
+$url = 'https://tenant1.app.com/clean-cache';
+
+Http::withHeaders(['Signature' => $signature])->post($url, $data);
+```
+
+You need to set this header in the request to clean the cache

@@ -2,25 +2,20 @@
 
 namespace Placetopay\Cerberus;
 
+
 use Illuminate\Support\Facades\Event;
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
 use Placetopay\Cerberus\Commands\TenantsListCommand;
 use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
 use Placetopay\Cerberus\Listeners\SetLoggerContext;
 use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
+use Illuminate\Routing\Router;
+use Placetopay\Cerberus\Http\Controllers\TenantController;
+use Placetopay\Cerberus\Http\Middlewares\AppCleanCache;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
 {
-    public function boot()
-    {
-        parent::boot();
-
-        Event::listen(
-            MadeTenantCurrentEvent::class,
-            [SetLoggerContext::class, 'handle']
-        );
-    }
 
     protected function bootCommands(): self
     {
@@ -31,6 +26,20 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
         ]);
 
         return $this;
+    }
+
+    public function boot(): void
+    {
+        parent::boot();
+
+        Event::listen(
+            MadeTenantCurrentEvent::class,
+            [SetLoggerContext::class, 'handle']
+        );
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('clean-cache', AppCleanCache::class);
+        $this->app['router']->post('/clean-cache', ['uses' =>  TenantController::class . '@clean', 'as' => 'app.clean']);
     }
 
     public function register(): void
