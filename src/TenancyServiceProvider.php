@@ -2,21 +2,19 @@
 
 namespace Placetopay\Cerberus;
 
-
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Placetopay\Cerberus\Commands\TenantsArtisanCommand;
 use Placetopay\Cerberus\Commands\TenantsListCommand;
 use Placetopay\Cerberus\Commands\TenantsSkeletonStorageCommand;
-use Placetopay\Cerberus\Listeners\SetLoggerContext;
-use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
-use Illuminate\Routing\Router;
 use Placetopay\Cerberus\Http\Controllers\TenantController;
 use Placetopay\Cerberus\Http\Middlewares\AppCleanCache;
+use Placetopay\Cerberus\Listeners\SetLoggerContext;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 use Spatie\Multitenancy\MultitenancyServiceProvider;
 
 class TenancyServiceProvider extends MultitenancyServiceProvider
 {
-
     protected function bootCommands(): self
     {
         $this->commands([
