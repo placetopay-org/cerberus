@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
@@ -72,8 +73,12 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
         }
 
+        $tenant = Cache::rememberForever("tenant_{$tenantDomain}", function () use ($tenantDomain) {
+            return $this->getTenantModel()::query()->whereDomain($tenantDomain)->first();
+        });
+
         /** @var \Placetopay\Cerberus\Models\Tenant $tenant */
-        if (!$tenant = $this->getTenantModel()::query()->whereDomain($tenantDomain)->first()) {
+        if (!$tenant) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
