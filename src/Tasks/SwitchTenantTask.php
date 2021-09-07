@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Tasks;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
@@ -51,6 +52,8 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
         }
 
         DB::purge($tenantConnectionName);
+        DB::reconnect($tenantConnectionName);
+        Schema::connection($tenantConnectionName)->getConnection()->reconnect();
     }
 
     private function setConfig(Tenant $tenant): void

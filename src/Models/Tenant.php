@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Models;
 
 use Placetopay\Cerberus\Scopes\AppScope;
+use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
 /**
@@ -14,6 +15,8 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
  */
 class Tenant extends TenantSpatie
 {
+    use UsesLandlordConnection;
+
     protected $fillable = ['config'];
 
     protected $casts = [
