@@ -52,8 +52,6 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
         }
 
         DB::purge($tenantConnectionName);
-        DB::reconnect($tenantConnectionName);
-        Schema::connection($tenantConnectionName)->getConnection()->reconnect();
     }
 
     private function setConfig(Tenant $tenant): void

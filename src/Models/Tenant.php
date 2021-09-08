@@ -15,8 +15,6 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
  */
 class Tenant extends TenantSpatie
 {
-    use UsesLandlordConnection;
-
     protected $fillable = ['config'];
 
     protected $casts = [
