@@ -27,6 +27,8 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
     {
         $this->setConfig($tenant);
         $this->purgeConnectionDatabase();
+        //set default timezone for all instances
+        date_default_timezone_set(config('app.timezone'));
     }
 
     /**
