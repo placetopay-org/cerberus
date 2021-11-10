@@ -18,7 +18,7 @@ class DomainTenantFinder extends TenantFinder
         $host = $request->getHost();
         $vanityUrl = $_ENV['APP_VANITY_URL'] ?? '';
 
-        if ('https://'.$host === $vanityUrl) {
+        if ('https://' . $host === $vanityUrl) {
             return null;
         }
 
