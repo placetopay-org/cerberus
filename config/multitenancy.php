@@ -7,6 +7,7 @@ use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Actions\MakeQueueTenantAwareAction;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\FilesystemSuffixedTask;
+use Placetopay\Cerberus\Tasks\SwitchMailerTask;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
@@ -56,6 +57,7 @@ return [
         FilesystemSuffixedTask::class,
         SwitchTenantTask::class,
         PrefixCacheTask::class,
+        SwitchMailerTask::class,
     ],
 
     /*
