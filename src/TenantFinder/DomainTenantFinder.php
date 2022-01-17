@@ -15,21 +15,21 @@ class DomainTenantFinder extends TenantFinder
 
     public function findForRequest(Request $request): ?Tenant
     {
-        $host = $request->getHost();
+        $domain = $request->getHost() . $request->getBaseUrl();
         $vanityUrl = $_ENV['APP_VANITY_URL'] ?? '';
 
-        if ('https://' . $host === $vanityUrl) {
+        if ('https://' . $domain === $vanityUrl) {
             return null;
         }
 
-        return $this->getTenant($host);
+        return $this->getTenant($domain);
     }
 
-    public function getTenant($host)
+    public function getTenant($domain)
     {
-        return Landlord::execute(function () use ($host) {
-            return Cache::rememberForever("tenant_{$host}", function () use ($host) {
-                return $this->getTenantModel()::query()->whereDomain($host)->first();
+        return Landlord::execute(function () use ($domain) {
+            return Cache::rememberForever("tenant_{$domain}", function () use ($domain) {
+                return $this->getTenantModel()::query()->whereDomain($domain)->first();
             });
         });
     }
