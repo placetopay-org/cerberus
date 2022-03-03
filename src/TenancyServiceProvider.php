@@ -28,8 +28,6 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
 
     public function boot(): void
     {
-        parent::boot();
-
         Event::listen(
             MadeTenantCurrentEvent::class,
             [SetLoggerContext::class, 'handle']
@@ -38,6 +36,8 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('clean-cache', AppCleanCache::class);
         $this->app['router']->post('/clean-cache', ['uses' =>  TenantController::class . '@clean', 'as' => 'app.clean']);
+
+        parent::boot();
     }
 
     public function register(): void
