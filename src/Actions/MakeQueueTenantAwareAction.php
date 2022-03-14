@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
@@ -63,7 +64,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         return config('multitenancy.queues_are_tenant_aware_by_default') === true;
     }
 
-    protected function findTenant(JobProcessing $event): Tenant
+    protected function findTenant(JobProcessing|JobRetryRequested $event): Tenant
     {
         $tenantDomain = $event->job->payload()['tenantDomain'];
 

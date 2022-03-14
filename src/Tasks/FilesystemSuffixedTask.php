@@ -2,7 +2,6 @@
 
 namespace Placetopay\Cerberus\Tasks;
 
-use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Multitenancy\Models\Tenant;
@@ -12,7 +11,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 {
     private Application $app;
 
-    private array $originalPaths = [];
+    private array $originalPaths;
 
     public function __construct(Application $app)
     {
@@ -35,23 +34,19 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         // storage_path()
         if (config('multitenancy.suffix_storage_path')) {
-            $this->app->useStoragePath($this->originalPaths['storage'] . "/{$suffix}");
+            $this->app->useStoragePath($this->originalPaths['storage']."/$suffix");
         }
 
+        Storage::forgetDisk(config('multitenancy.filesystems_disks'));
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
-            if (!$this->canSuffixS3Driver($disk)) {
+            if (! $this->canSuffixS3Driver($disk)) {
                 continue;
             }
 
-            /** @var FilesystemAdapter $filesystemDisk */
-            if ($filesystemDisk = Storage::disk($disk)) {
-                $this->originalPaths['disks'][$disk] = $filesystemDisk->getAdapter()->getPathPrefix();
-
-                $root = $this->app['config']["filesystems.disks.{$disk}.root"];
-                $filesystemDisk->getAdapter()->setPathPrefix($finalPrefix = $root . "/{$suffix}");
-                $this->app['config']["filesystems.disks.{$disk}.root"] = $finalPrefix;
-            }
+            $originalRoot = config("filesystems.disks.$disk.root");
+            $this->originalPaths['disks'][$disk] = $originalRoot;
+            $this->app['config']["filesystems.disks.$disk.root"] = $originalRoot.'/'.$suffix;
         }
     }
 
@@ -62,19 +57,15 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             $this->app->useStoragePath($this->originalPaths['storage']);
         }
 
+        Storage::forgetDisk(config('multitenancy.filesystems_disks'));
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
-            if (!$this->canSuffixS3Driver($disk) || !array_key_exists($disk, $this->originalPaths['disks'])) {
+            if (! $this->canSuffixS3Driver($disk) || ! array_key_exists($disk, $this->originalPaths['disks'])) {
                 continue;
             }
 
-            /** @var FilesystemAdapter $filesystemDisk */
-            $filesystemDisk = Storage::disk($disk);
-
             $root = $this->originalPaths['disks'][$disk];
-
-            $filesystemDisk->getAdapter()->setPathPrefix($root);
-            $this->app['config']["filesystems.disks.{$disk}.root"] = $root;
+            $this->app['config']["filesystems.disks.$disk.root"] = $root;
         }
     }
 
