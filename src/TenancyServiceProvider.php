@@ -45,12 +45,9 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
             $this->registerPublishables();
         }
 
-        $this
-            ->bootCommands()
-            ->registerTenantFinder()
-            ->registerTasksCollection()
-            ->configureRequests()
-            ->configureQueue();
+        $this->bootCommands();
+
+        parent::packageBooted();
     }
 
     public function register(): void
@@ -71,64 +68,6 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
                 __DIR__.'/../database/migrations/landlord/create_landlord_failed_jobs_table.php.stub' => database_path('migrations/landlord/'.date('Y_m_d_His', time()).'_create_landlord_failed_jobs_table.php'),
             ], 'migrations');
         }
-
-        return $this;
-    }
-
-    protected function registerTenantFinder(): self
-    {
-        if (config('multitenancy.tenant_finder')) {
-            $this->app->bind(TenantFinder::class, config('multitenancy.tenant_finder'));
-        }
-
-        return $this;
-    }
-
-    protected function registerTasksCollection(): self
-    {
-        $this->app->singleton(TasksCollection::class, function () {
-            $taskClassNames = config('multitenancy.switch_tenant_tasks');
-
-            return new TasksCollection($taskClassNames);
-        });
-
-        return $this;
-    }
-
-    protected function configureRequests(): self
-    {
-        if (! $this->app->runningInConsole()) {
-            $this->determineCurrentTenant();
-        }
-
-        return $this;
-    }
-
-    protected function determineCurrentTenant(): void
-    {
-        if (! config('multitenancy.tenant_finder')) {
-            return;
-        }
-
-        /** @var TenantFinder $tenantFinder */
-        $tenantFinder = app(TenantFinder::class);
-
-        $tenant = $tenantFinder->findForRequest(request());
-
-        optional($tenant)->makeCurrent();
-    }
-
-    /**
-     * @throws InvalidConfiguration
-     */
-    protected function configureQueue(): self
-    {
-        $this
-            ->getMultitenancyActionClass(
-                'make_queue_tenant_aware_action',
-                MakeQueueTenantAwareAction::class
-            )
-            ->execute();
 
         return $this;
     }
