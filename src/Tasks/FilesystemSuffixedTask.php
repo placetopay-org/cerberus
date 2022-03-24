@@ -43,10 +43,15 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             if (! $this->canSuffixS3Driver($disk)) {
                 continue;
             }
-
+        
             $originalRoot = config("filesystems.disks.$disk.root");
             $this->originalPaths['disks'][$disk] = $originalRoot;
-            $this->app['config']["filesystems.disks.$disk.root"] = $originalRoot.'/'.$suffix;
+            
+            $finalPrefix = $originalRoot
+                    ? rtrim($originalRoot, '/') . '/'. $suffix
+                    : $suffix;
+            
+            $this->app['config']["filesystems.disks.$disk.root"] = $finalPrefix;
         }
     }
 
