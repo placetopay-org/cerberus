@@ -6,4 +6,5 @@ All notable changes to `cerberus` will be documented in this file
 
 - add support for Laravel 9
 - add support for PHP 8
+- drop support for PHP7
 - upgrade laravel-multitenancy to version ^2.0
