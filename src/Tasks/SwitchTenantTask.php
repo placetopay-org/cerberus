@@ -2,7 +2,6 @@
 
 namespace Placetopay\Cerberus\Tasks;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
@@ -66,8 +65,23 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
 
         $newConfig = json_decode(str_replace($keywords['keys'], $keywords['values'], $rawConfig), true);
 
-        $dataMapping = Arr::dot($newConfig ?? []);
+        $dataMapping = $this->dot($newConfig ?? []);
 
         config($dataMapping);
+    }
+
+    private function dot(array $array, $prepend = ''): array
+    {
+        $results = [];
+
+        foreach ($array as $key => $value) {
+            if (is_array($value) && !empty($value) && array_filter(array_keys($value), 'is_int') === []) {
+                $results = array_merge($results, $this->dot($value, $prepend . $key . '.'));
+            } else {
+                $results[$prepend . $key] = $value;
+            }
+        }
+
+        return $results;
     }
 }

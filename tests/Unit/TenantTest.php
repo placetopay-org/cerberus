@@ -23,6 +23,13 @@ class TenantTest extends TestCase
                    'es_CL' => 'terminos y condiciones chile',
                ],
            ],
+            'app' => [
+                'locales' => [
+                    'es',
+                    'en',
+                    'fr',
+                ],
+            ],
         ];
 
         $this->tenant = factory(Tenant::class)->create([
@@ -80,5 +87,15 @@ class TenantTest extends TestCase
         $this->tenant->makeCurrent();
 
         $this->assertEmpty(app('currentTenant')->translate('terms_and_privacy'));
+    }
+
+    /** @test */
+    public function it_returns_successfully_overwritten_locales(): void
+    {
+        config()->set('app.locales', ['en', 'es', 'fr', 'it', 'pt']);
+
+        $this->tenant->makeCurrent();
+
+        $this->assertEquals(['es', 'en', 'fr'], config('app.locales'));
     }
 }
