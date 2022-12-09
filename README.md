@@ -1,6 +1,6 @@
 # Placetopay multitenancy package
 
-This package is based on the first version of package `spatie/laravel-multitenancy`.
+This package is based on the second version of package `spatie/laravel-multitenancy`.
 
 Because it is a customization, it requires override steps mentioned below for proper installation.
 
@@ -9,15 +9,15 @@ Because it is a customization, it requires override steps mentioned below for pr
 This package aims to standardize the configuration of the ``tenants`` table of the landlord database, in addition to reducing the number of queries made to the same database by using cache.
 
 ## Prerequsites
-- `php7.4+`
-- `Laravel 7.0+`
+- `php8.0+`
+- `Laravel 8.0+`
 
 ## Installation
 
 This package can be installed via composer:
 
 ``` bash
-composer require "placetopay/cerberus:^1.0"
+composer require "placetopay/cerberus:^2.0"
 ```
 
 ### Publishing the config file
@@ -25,13 +25,13 @@ composer require "placetopay/cerberus:^1.0"
 You must publish the config file:
 
 ``` bash
-php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="config"
+php artisan vendor:publish --tag="multitenancy-config"
 ```
 
 ### Publishing the migrate file
 
 ``` bash
-php artisan vendor:publish --provider="Placetopay\Cerberus\TenancyServiceProvider" --tag="migrations"
+php artisan vendor:publish --tag="multitenancy-migrations"
 ```
 
 ### Create storage folder by tenancy

@@ -3,7 +3,9 @@
 namespace Placetopay\Cerberus\Actions;
 
 use Illuminate\Queue\Events\JobProcessing;
+use Illuminate\Queue\Events\JobRetryRequested;
 use Illuminate\Support\Arr;
+use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
@@ -18,7 +20,8 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     {
         $this
             ->listenForJobsBeingQueued()
-            ->listenForJobsBeingProcessed();
+            ->listenForJobsBeingProcessed()
+            ->listenForJobsRetryRequested();
     }
 
     protected function listenForJobsBeingQueued(): self
@@ -49,31 +52,46 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         return $this;
     }
 
+    protected function listenForJobsRetryRequested(): self
+    {
+        app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
+            if (!array_key_exists('tenantDomain', $event->payload())) {
+                return;
+            }
+
+            $this->findTenant($event)->makeCurrent();
+        });
+
+        return $this;
+    }
+
     protected function isTenantAware(object $queueable): bool
     {
         $reflection = new \ReflectionClass($this->getJobFromQueueable($queueable));
 
         if ($reflection->implementsInterface(TenantAware::class)) {
             return true;
-        } elseif ($reflection->implementsInterface(NotTenantAware::class)) {
+        }
+
+        if ($reflection->implementsInterface(NotTenantAware::class)) {
             return false;
         }
 
         return config('multitenancy.queues_are_tenant_aware_by_default') === true;
     }
 
-    protected function findTenant(JobProcessing $event): Tenant
+    protected function findTenant(JobProcessing|JobRetryRequested $event): Tenant
     {
-        $tenantDomain = $event->job->payload()['tenantDomain'];
+        $tenantDomain = $this->getEventPayload($event)['tenantDomain'] ?? null;
 
         if (!$tenantDomain) {
             $event->job->delete();
 
-            throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noIdSet($event);
+            throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
         }
 
         /** @var \Placetopay\Cerberus\Models\Tenant $tenant */
-        if (!$tenant = $this->getTenantModel()::query()->whereDomain($tenantDomain)->first()) {
+        if (!$tenant = (new DomainTenantFinder)->getTenant($tenantDomain)) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
@@ -84,7 +102,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
 
     protected function getJobFromQueueable(object $queueable)
     {
-        $job = Arr::get(config('multitenancy.queueable_to_job'), get_class($queueable));
+        $job = Arr::get(config('multitenancy.queueable_to_job'), $queueable::class);
 
         if (!$job) {
             return $queueable;

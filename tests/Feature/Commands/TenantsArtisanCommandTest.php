@@ -55,7 +55,7 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant()
     {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')
+        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->domain . '"')
             ->assertExitCode(0);
 
         $this
@@ -66,14 +66,15 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
     {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->name . '"')
+        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->name . '"')
             ->expectsOutput('No tenant(s) found.');
     }
 
     /** @test */
     public function it_can_migrate_a_specific_tenant_by_domain()
     {
-        $this->artisan('tenants:artisan migrate --tenant=' . $this->anotherTenant->domain . '"')->assertExitCode(0);
+        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->domain . '"')
+            ->assertExitCode(0);
 
         $this
             ->assertTenantDatabaseDoesNotHaveTable($this->tenant, 'migrations')

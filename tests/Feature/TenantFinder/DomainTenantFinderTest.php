@@ -51,4 +51,20 @@ class DomainTenantFinderTest extends TestCase
 
         $this->assertNull($this->tenantFinder->findForRequest($request));
     }
+
+    /** @test */
+    public function it_can_find_a_tenant_for_domain_with_path()
+    {
+        $tenant = factory(Tenant::class)->create([
+            'app' => config('multitenancy.identifier'),
+            'domain' => 'my-domain.com/my-path',
+        ]);
+
+        $request = Request::create('http://my-domain.com/my-path/login', 'GET', [], [], [], [
+            'SCRIPT_FILENAME' => 'my-path',
+            'SCRIPT_NAME' => 'my-path',
+        ]);
+
+        $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
+    }
 }
