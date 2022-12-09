@@ -90,7 +90,7 @@ class TenantTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_successfully_overwritten_locales(): void
+    public function overwrite_array_keys_config_values_successfully(): void
     {
         config()->set('app.locales', ['en', 'es', 'fr', 'it', 'pt']);
 
