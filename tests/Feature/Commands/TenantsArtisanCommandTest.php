@@ -81,6 +81,18 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
+    /** @test */
+    public function it_works_with_parameters_that_contain_spaces()
+    {
+        $this->artisan('tenants:artisan "echo:argument hello" --no-slashes --tenant="' . $this->anotherTenant->domain . '"')
+            ->expectsOutput('hello')
+            ->assertExitCode(0);
+
+        $this->artisan('tenants:artisan "echo:argument \'hello world\'" --no-slashes --tenant="' . $this->anotherTenant->domain . '"')
+            ->expectsOutput('hello world')
+            ->assertExitCode(0);
+    }
+
     protected function assertTenantDatabaseHasTable(Tenant $tenant, string $tableName): self
     {
         $tenantHasDatabaseTable = $this->tenantHasDatabaseTable($tenant, $tableName);
