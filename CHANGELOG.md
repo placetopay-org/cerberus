@@ -2,6 +2,10 @@
 
 All notable changes to `cerberus` will be documented in this file
 
+## [v2.1.0 (2023-04-13)](https://github.com/placetopay-org/cerberus/compare/2.0.2...2.1.0)
+
+- Adds `--no-slashes` option to `tenants:artisan` command. This option will prevent slashes from being added to the command. [#23](https://github.com/placetopay-org/cerberus/pull/23)
+
 ## [v2.0.2 (2023-01-10)](https://github.com/placetopay-org/cerberus/compare/2.0.1...2.0.2)
 
 - Fixed config merge using array with numeric values. [#21](https://github.com/placetopay-org/cerberus/pull/21)
