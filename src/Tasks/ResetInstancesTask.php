@@ -15,7 +15,7 @@ class ResetInstancesTask implements SwitchTenantTask
     public function forgetCurrent(): void
     {
         foreach (config('multitenancy.forget_instances', []) as $abstract) {
-            App::forgetInstance($abstract);
+            app()->forgetInstance($abstract);
         }
     }
 }
