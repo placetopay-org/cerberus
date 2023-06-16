@@ -7,6 +7,7 @@ use Illuminate\Notifications\SendQueuedNotifications;
 use Placetopay\Cerberus\Actions\MakeQueueTenantAwareAction;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\FilesystemSuffixedTask;
+use Placetopay\Cerberus\Tasks\ResetInstancesTask;
 use Placetopay\Cerberus\Tasks\SwitchMailerTask;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
@@ -58,6 +59,7 @@ return [
         SwitchTenantTask::class,
         PrefixCacheTask::class,
         SwitchMailerTask::class,
+        ResetInstancesTask::class
     ],
 
     /*
@@ -118,4 +120,10 @@ return [
      * You need to set up this key to use in the middleware to validate when someone application wants to clear cache remotely.
      */
     'middleware_key' => '',
+
+    /**
+     * You can add the container to reset when switching a tenant
+     */
+    'forget_instances' => [
+    ],
 ];
