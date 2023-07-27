@@ -27,7 +27,7 @@ class TenantsArtisanCommand extends TenantsArtisanParentCommand
         }
 
         if (! $this->option('no-slashes')) {
-            $artisanCommand = addslashes($artisanCommand);
+            $artisanCommand = addslashes((string) $artisanCommand);
         }
 
         $tenant = Tenant::current();

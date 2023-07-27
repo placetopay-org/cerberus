@@ -7,7 +7,7 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class SwitchMailerTask implements SwitchTenantTask
 {
-    private string $originalDrive;
+    private readonly string $originalDrive;
 
     public function __construct()
     {

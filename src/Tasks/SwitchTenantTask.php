@@ -11,7 +11,7 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
 {
     use UsesMultitenancyConfig;
 
-    private array $originalValues;
+    private readonly array $originalValues;
 
     public function __construct()
     {
@@ -63,7 +63,7 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
             'values' => [storage_path()],
         ];
 
-        $newConfig = json_decode(str_replace($keywords['keys'], $keywords['values'], $rawConfig), true);
+        $newConfig = json_decode(str_replace($keywords['keys'], $keywords['values'], (string) $rawConfig), true);
 
         $dataMapping = $this->dot($newConfig ?? []);
 

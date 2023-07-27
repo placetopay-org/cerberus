@@ -66,6 +66,6 @@ class Tenant extends TenantSpatie
 
     private function shortLocale($locale): string
     {
-        return strtolower(substr($locale, 0, 2));
+        return strtolower(substr((string) $locale, 0, 2));
     }
 }

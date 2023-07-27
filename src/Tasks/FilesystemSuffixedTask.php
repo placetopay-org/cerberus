@@ -9,13 +9,10 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class FilesystemSuffixedTask implements SwitchTenantTask
 {
-    private Application $app;
-
     private array $originalPaths;
 
-    public function __construct(Application $app)
+    public function __construct(private Application $app)
     {
-        $this->app = $app;
         $this->originalPaths = [
             'disks' => [],
             'storage' => $this->app->storagePath(),
@@ -49,7 +46,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             $this->originalPaths['disks'][$disk] = $originalRoot;
 
             $finalPrefix = $originalRoot
-                    ? rtrim($originalRoot, '/').'/'.$suffix
+                    ? rtrim((string) $originalRoot, '/').'/'.$suffix
                     : $suffix;
 
             $this->app['config']["filesystems.disks.$disk.root"] = $finalPrefix;

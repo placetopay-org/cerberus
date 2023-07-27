@@ -7,11 +7,8 @@ use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 
 class SetLoggerContext
 {
-    private LogManager $logger;
-
-    public function __construct(LogManager $logger)
+    public function __construct(private readonly LogManager $logger)
     {
-        $this->logger = $logger;
     }
 
     public function handle(MadeTenantCurrentEvent $event)

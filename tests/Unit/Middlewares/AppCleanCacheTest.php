@@ -44,6 +44,6 @@ class AppCleanCacheTest extends TestCase
             'action' => 'cache:clear',
         ];
 
-        return hash_hmac('sha256', json_encode($data), $key);
+        return hash_hmac('sha256', json_encode($data), (string) $key);
     }
 }
