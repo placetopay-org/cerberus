@@ -2,7 +2,6 @@
 
 namespace Placetopay\Cerberus\Tasks;
 
-use Illuminate\Support\Facades\App;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 

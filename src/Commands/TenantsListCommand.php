@@ -22,7 +22,7 @@ class TenantsListCommand extends Command
 
         $tenantQuery->cursor()
             ->each(function (Tenant $tenant) {
-                $this->line("[Tenant] domain: {$tenant['domain']} @ " . $tenant['name']);
+                $this->line("[Tenant] domain: {$tenant['domain']} @ ".$tenant['name']);
             });
     }
 }

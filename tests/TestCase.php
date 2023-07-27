@@ -19,7 +19,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__ . '/database/factories');
+        $this->withFactories(__DIR__.'/database/factories');
 
         $this->migrateDb();
 
@@ -51,7 +51,7 @@ abstract class TestCase extends Orchestra
 
     protected function migrateDb(): self
     {
-        $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
+        $landLordMigrationsPath = realpath(__DIR__.'/database/migrations/landlord');
         $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this

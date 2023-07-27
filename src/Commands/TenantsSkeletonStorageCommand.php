@@ -17,8 +17,9 @@ class TenantsSkeletonStorageCommand extends Command
 
     public function handle(): int
     {
-        if (!config('multitenancy.suffix_storage_path')) {
+        if (! config('multitenancy.suffix_storage_path')) {
             $this->error('Storage tenancies are not enabled.');
+
             return 1;
         }
 

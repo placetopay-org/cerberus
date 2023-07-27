@@ -55,7 +55,7 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_can_migrate_a_specific_tenant()
     {
-        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->domain . '"')
+        $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->domain.'"')
             ->assertExitCode(0);
 
         $this
@@ -66,14 +66,14 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
     {
-        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->name . '"')
+        $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->name.'"')
             ->expectsOutput('No tenant(s) found.');
     }
 
     /** @test */
     public function it_can_migrate_a_specific_tenant_by_domain()
     {
-        $this->artisan('tenants:artisan migrate --tenant="' . $this->anotherTenant->domain . '"')
+        $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->domain.'"')
             ->assertExitCode(0);
 
         $this
@@ -84,11 +84,11 @@ class TenantsArtisanCommandTest extends TestCase
     /** @test */
     public function it_works_with_parameters_that_contain_spaces()
     {
-        $this->artisan('tenants:artisan "echo:argument hello" --no-slashes --tenant="' . $this->anotherTenant->domain . '"')
+        $this->artisan('tenants:artisan "echo:argument hello" --no-slashes --tenant="'.$this->anotherTenant->domain.'"')
             ->expectsOutput('hello')
             ->assertExitCode(0);
 
-        $this->artisan('tenants:artisan "echo:argument \'hello world\'" --no-slashes --tenant="' . $this->anotherTenant->domain . '"')
+        $this->artisan('tenants:artisan "echo:argument \'hello world\'" --no-slashes --tenant="'.$this->anotherTenant->domain.'"')
             ->expectsOutput('hello world')
             ->assertExitCode(0);
     }

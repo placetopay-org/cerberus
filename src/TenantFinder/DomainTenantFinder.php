@@ -15,10 +15,10 @@ class DomainTenantFinder extends TenantFinder
 
     public function findForRequest(Request $request): ?Tenant
     {
-        $domain = $request->getHost() . $request->getBaseUrl();
+        $domain = $request->getHost().$request->getBaseUrl();
         $vanityUrl = $_ENV['APP_VANITY_URL'] ?? '';
 
-        if ('https://' . $domain === $vanityUrl) {
+        if ('https://'.$domain === $vanityUrl) {
             return null;
         }
 
