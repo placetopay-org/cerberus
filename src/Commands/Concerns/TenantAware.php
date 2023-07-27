@@ -22,7 +22,7 @@ trait TenantAware
         }
 
         $tenants = collect($tenant)->map(
-            fn ($domain) => Cache::rememberForever("tenant_{$domain}", fn() => $this->getTenantModel()::query()->whereDomain($domain)->first())
+            fn ($domain) => Cache::rememberForever("tenant_{$domain}", fn () => $this->getTenantModel()::query()->whereDomain($domain)->first())
         )->filter();
 
         if ($tenants->count() === 0) {

@@ -27,6 +27,6 @@ class DomainTenantFinder extends TenantFinder
 
     public function getTenant($domain)
     {
-        return Landlord::execute(fn() => Cache::rememberForever("tenant_{$domain}", fn() => $this->getTenantModel()::query()->whereDomain($domain)->first()));
+        return Landlord::execute(fn () => Cache::rememberForever("tenant_{$domain}", fn () => $this->getTenantModel()::query()->whereDomain($domain)->first()));
     }
 }
