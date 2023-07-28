@@ -17,7 +17,7 @@ This package aims to standardize the configuration of the ``tenants`` table of t
 This package can be installed via composer:
 
 ``` bash
-composer require "placetopay/cerberus:^2.0"
+composer require "placetopay/cerberus:^3.0"
 ```
 
 ### Publishing the config file
