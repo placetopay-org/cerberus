@@ -2,7 +2,7 @@
 
 All notable changes to `cerberus` will be documented in this file
 
-## [v2.2.1 (2023-07-28)](https://github.com/placetopay-org/cerberus/compare/2.2.0...2.2.1)
+## [v3.0.0 (2023-07-28)](https://github.com/placetopay-org/cerberus/compare/2.2.0...3.0.0)
 
 - Updates `spatie/laravel-multitenancy` to version 3.0.* 
 
