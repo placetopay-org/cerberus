@@ -1,6 +1,6 @@
 # Placetopay multitenancy package
 
-This package is based on the second version of package `spatie/laravel-multitenancy`.
+This package is based on the third version of package `spatie/laravel-multitenancy`.
 
 Because it is a customization, it requires override steps mentioned below for proper installation.
 
