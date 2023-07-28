@@ -2,6 +2,10 @@
 
 All notable changes to `cerberus` will be documented in this file
 
+## [v3.0.0 (2023-07-28)](https://github.com/placetopay-org/cerberus/compare/2.2.0...3.0.0)
+
+- Updates `spatie/laravel-multitenancy` to version 3.0.* 
+
 ## [v2.2.0 (2023-04-13)](https://github.com/placetopay-org/cerberus/compare/2.1.0...2.2.0)
 
 - Adds `ResetInstancesTask` to reset the containers when switching a tenant using `multitenancy.forget_instances` key [#24](https://github.com/placetopay-org/cerberus/pull/24)

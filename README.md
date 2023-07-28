@@ -1,6 +1,6 @@
 # Placetopay multitenancy package
 
-This package is based on the second version of package `spatie/laravel-multitenancy`.
+This package is based on the third version of package `spatie/laravel-multitenancy`.
 
 Because it is a customization, it requires override steps mentioned below for proper installation.
 
@@ -17,7 +17,7 @@ This package aims to standardize the configuration of the ``tenants`` table of t
 This package can be installed via composer:
 
 ``` bash
-composer require "placetopay/cerberus:^2.0"
+composer require "placetopay/cerberus:^3.0"
 ```
 
 ### Publishing the config file
