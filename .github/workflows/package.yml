@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create tenants databases
-        run: docker exec mysql mysql -u root -ppassword -e "create database laravel_mt_tenant_1;create database laravel_mt_tenant_2;create database laravel_mt_tenant_3;"
+        run: mysql -u root -ppassword -h 127.0.0.1 -P 32768 -e "create database laravel_mt_tenant_1;create database laravel_mt_tenant_2;create database laravel_mt_tenant_3;"
 
       - name: PHP Setup
         uses: shivammathur/setup-php@v2
