@@ -19,6 +19,7 @@ jobs:
     services:
       mysql:
         image: mysql:latest
+        name: mysql-container
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
@@ -30,6 +31,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Create tenants databases
+        run: docker exec mysql-container mysql -u root -ppassword -e "create database laravel_mt_tenant_1;create database laravel_mt_tenant_2;create database laravel_mt_tenant_3;"
 
       - name: PHP Setup
         uses: shivammathur/setup-php@v2
@@ -43,9 +47,6 @@ jobs:
 
       - name: PHP CS Fixer
         run: vendor/bin/php-cs-fixer fix --config=.php_cs
-
-      - name: Create tenants databases
-        run: mysql -u root -ppassword -e "create database laravel_mt_tenant_1;create database laravel_mt_tenant_2;create database laravel_mt_tenant_3;"
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit
