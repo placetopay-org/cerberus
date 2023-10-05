@@ -2,7 +2,7 @@ name: Cerberus
 
 on:
   push:
-    branches: [ "feature/github-actions", "develop", "main" ]
+    branches: [ "develop", "main" ]
   pull_request:
     branches: [ "develop", "main" ]
 
