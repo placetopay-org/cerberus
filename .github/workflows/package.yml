@@ -1,0 +1,48 @@
+name: Cerberus
+
+on: [push, pull_request]
+jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    env:
+      DB_DATABASE: laravel_mt_landlord
+      DB_USERNAME: root
+      DB_PASSWORD: password
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: laravel_mt_landlord
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create tenants databases
+        run: mysql -u root -ppassword -h 127.0.0.1 -P 32768 -e "create database laravel_mt_tenant_1;create database laravel_mt_tenant_2;create database laravel_mt_tenant_3;"
+
+      - name: PHP Setup
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring, dom, fileinfo, mysql
+          coverage: xdebug
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix --config=.php_cs
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: vendor/bin/phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
