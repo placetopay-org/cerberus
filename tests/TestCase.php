@@ -8,6 +8,7 @@ use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenancyServiceProvider;
+use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\EchoArgumentCommand;
 use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
@@ -47,6 +48,7 @@ abstract class TestCase extends Orchestra
         Artisan::starting(function ($artisan) {
             $artisan->resolveCommands([
                 TenantNoopCommand::class,
+                EchoArgumentCommand::class,
             ]);
         });
 

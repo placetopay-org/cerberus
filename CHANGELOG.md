@@ -7,16 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.3 (2023-10-06)](https://github.com/placetopay-org/cerberus/pull/27)
+## [3.0.1 (2023-10-09)](https://github.com/placetopay-org/cerberus/pull/27)
 
 ### Added
 
 - Run GitHub Actions on push/pull_requests for all branches.
 
+### Changed
+
+- Standard for the CHANGELOG.md file.
+
 ### Fixed
 
 - TestsCase tearDown error due to an update in the orchestra/testbench package.
-- Standard for the CHANGELOG.md file.
+
+## [3.0.0 (2023-07-28)](https://github.com/placetopay-org/cerberus/compare/2.2.0...3.0.0)
+
+### Changed
+
+- Updates `spatie/laravel-multitenancy` to version 3.0.* 
+
+## [2.2.0 (2023-04-13)](https://github.com/placetopay-org/cerberus/compare/2.1.0...2.2.0)
+
+### Added
+
+- Adds `ResetInstancesTask` to reset the containers when switching a tenant using `multitenancy.forget_instances` key [#24](https://github.com/placetopay-org/cerberus/pull/24)
+
+## [2.1.0 (2023-04-13)](https://github.com/placetopay-org/cerberus/compare/2.0.2...2.1.0)
+
+### Added
+
+- Adds `--no-slashes` option to `tenants:artisan` command. This option will prevent slashes from being added to the command. [#23](https://github.com/placetopay-org/cerberus/pull/23)
 
 ## [2.0.2 (2023-01-10)](https://github.com/placetopay-org/cerberus/compare/2.0.1...2.0.2)
 
