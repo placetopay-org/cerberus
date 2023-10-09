@@ -28,6 +28,12 @@ abstract class TestCase extends Orchestra
         DB::table('jobs')->truncate();
     }
 
+    protected function tearDown(): void
+    {
+        config()->set('database.default', 'landlord');
+        parent::tearDown();
+    }
+
     protected function getPackageProviders($app): array
     {
         $this->bootCommands();
