@@ -35,7 +35,7 @@ class SwitchMailerTaskTest extends TestCase
     }
 
     /** @test */
-    public function it_can_reset_encrypt_container_ok(): void
+    public function it_resets_mailer_on_every_tenant(): void
     {
         // Default mail driver is 'smtp'
         $this->assertInstanceOf(\Swift_SmtpTransport::class, app('mailer')->getSwiftMailer()->getTransport());
