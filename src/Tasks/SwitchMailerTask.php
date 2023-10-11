@@ -16,13 +16,11 @@ class SwitchMailerTask implements SwitchTenantTask
 
     public function makeCurrent(Tenant $tenant): void
     {
-        $currentDrive = config('mail.default');
-
-        app('mail.manager')->forgetMailers()->mailer($currentDrive);
+        app('mail.manager')->forgetMailers();
     }
 
     public function forgetCurrent(): void
     {
-        app('mail.manager')->forgetMailers()->mailer($this->originalDrive);
+        app('mail.manager')->forgetMailers();
     }
 }
