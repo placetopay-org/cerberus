@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.0.1 (2023-10-09)](https://github.com/placetopay-org/cerberus/pull/27)
+## [3.0.2 (2023-10-11)](https://github.com/placetopay-org/cerberus/compare/3.0.1...3.0.2)
+
+### Changed
+
+- When switching tenants, the `SwitchMailerTask` will not instantiate a new mailer.
+
+## [3.0.1 (2023-10-09)](https://github.com/placetopay-org/cerberus/compare/3.0.0...3.0.1)
 
 ### Added
 
