@@ -31,7 +31,7 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
                 TenantsArtisanCommand::class,
                 TenantsListCommand::class,
                 TenantsSkeletonStorageCommand::class,
-                CacheClearCommand::class
+                CacheClearCommand::class,
             ]);
     }
 
@@ -44,7 +44,7 @@ class TenancyServiceProvider extends MultitenancyServiceProvider
 
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('clean-cache', AppCleanCache::class);
-        $this->app['router']->post('/clean-cache', ['uses' => TenantController::class.'@clean', 'as' => 'app.clean']);
+        $this->app['router']->post('/clean-cache', ['uses' => TenantController::class . '@clean', 'as' => 'app.clean']);
 
         parent::packageBooted();
     }

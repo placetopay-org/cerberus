@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Broadcasting\BroadcastEvent;
-use Illuminate\Encryption\Encrypter;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
@@ -123,7 +122,7 @@ return [
     'middleware_key' => '',
 
     /**
-     * You can add the container to reset when switching a tenant
+     * You can add the container to reset when switching a tenant.
      */
     'forget_instances' => [
     ],
