@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Placetopay\Cerberus\Cache\CacheHandler;
 use Placetopay\Cerberus\Cache\RedisHandler;
 
@@ -16,8 +17,7 @@ class CacheClearCommand extends Command
     {
         $prefix = $this->option('prefix');
         if (!$prefix) {
-            $this->error('You must provide a prefix');
-            return;
+            $prefix = rtrim(Cache::getStore()->getPrefix(), ':');
         }
 
         $cacheHandler = $this->getCacheHandler();
