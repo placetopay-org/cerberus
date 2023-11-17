@@ -12,11 +12,11 @@ class RedisHandler implements CacheHandler
 
         $redis = Redis::connection('cache');
 
-        $prefix = ltrim($prefix, $generalPrefix);
+        $prefix = str_replace($generalPrefix, '', $prefix);
         $keys = $redis->keys("$prefix*");
 
         foreach ($keys as $key) {
-            $redis->del(ltrim($key, $generalPrefix));
+            $redis->del(str_replace($generalPrefix, '', $key));
         }
 
         return count($keys);
