@@ -4,5 +4,5 @@ namespace Placetopay\Cerberus\Cache;
 
 interface CacheHandler
 {
-    public function clear(string $prefix = ''): void;
+    public function clear(string $prefix = ''): int;
 }

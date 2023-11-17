@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Redis;
 
 class RedisHandler implements CacheHandler
 {
-    public function clear(string $prefix = ''): void
+    public function clear(string $prefix = ''): int
     {
         $generalPrefix = config('database.redis.options.prefix', '');
 
@@ -18,5 +18,7 @@ class RedisHandler implements CacheHandler
         foreach ($keys as $key) {
             $redis->del(ltrim($key, $generalPrefix));
         }
+
+        return count($keys);
     }
 }

@@ -8,7 +8,7 @@ use Placetopay\Cerberus\Cache\RedisHandler;
 
 class CacheClearCommand extends Command
 {
-    protected $signature = 'cerberus:cache-clear {--prefix=* : Prefix to match the keys to clear}';
+    protected $signature = 'cerberus:cache-clear {--prefix= : Prefix to match the keys to clear}';
 
     protected $description = 'Delete all the cache entries by the given prefix';
 
@@ -25,8 +25,8 @@ class CacheClearCommand extends Command
             $this->error('Cache driver not supported');
             return;
         }
-        $cacheHandler->clear($prefix);
-        $this->info('Cache cleared');
+        $records = $cacheHandler->clear($prefix);
+        $this->info("$records records deleted");
     }
 
     private function getCacheHandler(): CacheHandler|null
