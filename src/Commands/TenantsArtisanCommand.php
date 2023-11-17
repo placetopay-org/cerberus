@@ -20,7 +20,7 @@ class TenantsArtisanCommand extends TenantsArtisanParentCommand
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if (!$artisanCommand = $this->argument('artisanCommand')) {
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
