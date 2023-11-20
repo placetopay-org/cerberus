@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Cache;
 use Placetopay\Cerberus\Tests\TestCase;
+use Symfony\Component\Console\Command\Command;
 
 class TestClearCacheCommand extends TestCase
 {
@@ -14,7 +15,7 @@ class TestClearCacheCommand extends TestCase
     {
         config()->set('cache.default', 'database');
         $this->artisan('cerberus:cache-clear')
-            ->assertExitCode(1)
+            ->assertExitCode(Command::FAILURE)
             ->expectsOutput('Cache driver not supported');
     }
 
@@ -28,7 +29,7 @@ class TestClearCacheCommand extends TestCase
 
         $this->get('co.domain.com');
         $this->artisan('cerberus:cache-clear')
-            ->assertExitCode(0)
+            ->assertExitCode(Command::SUCCESS)
             ->expectsOutput('1 records deleted');
     }
 
@@ -39,10 +40,11 @@ class TestClearCacheCommand extends TestCase
     {
         config()->set('cache.default', 'redis');
         Cache::put('myPrefix:some_cache_key', 'some_cache_value');
+        Cache::put('some_cache_key', 'some_cache_value');
 
         $this->get('co.domain.com');
         $this->artisan('cerberus:cache-clear --prefix=myPrefix')
-            ->assertExitCode(0)
+            ->assertExitCode(Command::SUCCESS)
             ->expectsOutput('1 records deleted');
     }
 }
