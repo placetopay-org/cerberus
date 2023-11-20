@@ -32,5 +32,4 @@ class CacheClearCommand extends Command
 
         return SymfonyCommand::SUCCESS;
     }
-
 }

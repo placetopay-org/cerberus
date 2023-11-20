@@ -24,7 +24,6 @@ class TestClearCacheCommand extends TestCase
     public function it_can_clear_cache_with_redis(): void
     {
         config()->set('cache.default', 'redis');
-
         Cache::put('some_cache_key', 'some_cache_value');
 
         $this->get('co.domain.com');
