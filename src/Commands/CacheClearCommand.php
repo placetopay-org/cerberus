@@ -5,6 +5,7 @@ namespace Placetopay\Cerberus\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Placetopay\Cerberus\Cache\CacheHandlerFactory;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 class CacheClearCommand extends Command
 {
@@ -12,7 +13,7 @@ class CacheClearCommand extends Command
 
     protected $description = 'Delete all the cache entries by prefix';
 
-    public function handle(): void
+    public function handle(): int
     {
         $prefix = $this->option('prefix');
         if (!$prefix) {
@@ -20,13 +21,16 @@ class CacheClearCommand extends Command
         }
 
         $cacheHandler = CacheHandlerFactory::getHandler(config('cache.default'));
+
         if (!$cacheHandler) {
             $this->error('Cache driver not supported');
-            return;
+            return SymfonyCommand::FAILURE;
         }
 
         $records = $cacheHandler->clear($prefix);
         $this->info("$records records deleted");
+
+        return SymfonyCommand::SUCCESS;
     }
 
 }
