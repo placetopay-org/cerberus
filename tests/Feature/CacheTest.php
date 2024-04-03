@@ -43,8 +43,8 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
-            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is '.$this->tenant->id)
+            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
 
         $this->assertHasCache();
 
@@ -53,8 +53,8 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
-            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is '.$this->tenant->id)
+            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
     }
 
     /** @test */
@@ -85,8 +85,8 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
-            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is '.$this->tenant->id)
+            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
     }
 
     /** @test */
@@ -95,8 +95,8 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
-            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is '.$this->tenant->id)
+            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
 
         $this->assertHasCache();
 

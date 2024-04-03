@@ -26,7 +26,7 @@ class TenantController extends Controller
         });
 
         return response()->json([
-           'message' => 'cache cleared',
+            'message' => 'cache cleared',
         ]);
     }
 }

@@ -16,7 +16,7 @@ class ResetInstanceTaskTest extends TestCase
             'name' => 'tenant_1',
             'config' => [
                 'app' => [
-                    'key' => "base64:JBa5rX3XEf6VuV+YqKGlPvgEJfa7ZzqbUV6TQWRwnG4="
+                    'key' => 'base64:JBa5rX3XEf6VuV+YqKGlPvgEJfa7ZzqbUV6TQWRwnG4=',
                 ],
             ],
         ]);
@@ -26,7 +26,7 @@ class ResetInstanceTaskTest extends TestCase
             'name' => 'tenant_2',
             'config' => [
                 'app' => [
-                    'key' => "base64:atprG7MqSOqUfRuK7NRIDQve0oYbrUzcIivlW2bLP+0="
+                    'key' => 'base64:atprG7MqSOqUfRuK7NRIDQve0oYbrUzcIivlW2bLP+0=',
                 ],
             ],
         ]);

@@ -29,7 +29,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
             $queueable = $payload['data']['command'];
 
-            if (!$this->isTenantAware($queueable)) {
+            if (! $this->isTenantAware($queueable)) {
                 return [];
             }
 
@@ -42,7 +42,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     protected function listenForJobsBeingProcessed(): static
     {
         app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            if (!array_key_exists('tenantDomain', $event->job->payload())) {
+            if (! array_key_exists('tenantDomain', $event->job->payload())) {
                 return;
             }
 
@@ -55,7 +55,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     protected function listenForJobsRetryRequested(): static
     {
         app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
-            if (!array_key_exists('tenantDomain', $event->payload())) {
+            if (! array_key_exists('tenantDomain', $event->payload())) {
                 return;
             }
 
@@ -84,14 +84,14 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     {
         $tenantDomain = $this->getEventPayload($event)['tenantDomain'] ?? null;
 
-        if (!$tenantDomain) {
+        if (! $tenantDomain) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
         }
 
         /** @var \Placetopay\Cerberus\Models\Tenant $tenant */
-        if (!$tenant = (new DomainTenantFinder)->getTenant($tenantDomain)) {
+        if (! $tenant = (new DomainTenantFinder)->getTenant($tenantDomain)) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
@@ -104,7 +104,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
     {
         $job = Arr::get(config('multitenancy.queueable_to_job'), $queueable::class);
 
-        if (!$job) {
+        if (! $job) {
             return $queueable;
         }
 

@@ -13,15 +13,16 @@ class AppCleanCache
     ];
 
     public const EMPTY_CONFIG_KEY = "You must configure the variable 'multitenancy.middleware_key' to perform this action";
+
     public const UN_AUTHORIZED = 'You are not authorized to perform this action';
 
     public function handle(Request $request, Closure $next)
     {
-        if (!config('multitenancy.middleware_key')) {
+        if (! config('multitenancy.middleware_key')) {
             $this->unAuthorized(self::EMPTY_CONFIG_KEY);
         }
 
-        if (!$this->canClearCache($request) || !$this->allowedAction($request)) {
+        if (! $this->canClearCache($request) || ! $this->allowedAction($request)) {
             $this->unAuthorized();
         }
 
