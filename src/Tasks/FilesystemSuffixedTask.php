@@ -24,6 +24,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         $this->app['url']->macro('setAssetRoot', function ($root) {
             $this->assetRoot = $root;
+
             return $this;
         });
     }
@@ -34,13 +35,13 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
         // storage_path()
         if (config('multitenancy.suffix_storage_path')) {
-            $this->app->useStoragePath($this->originalPaths['storage'] . "/$suffix");
+            $this->app->useStoragePath($this->originalPaths['storage']."/$suffix");
         }
 
         Storage::forgetDisk(config('multitenancy.filesystems_disks'));
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
-            if (!$this->canSuffixS3Driver($disk)) {
+            if (! $this->canSuffixS3Driver($disk)) {
                 continue;
             }
 
@@ -48,7 +49,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             $this->originalPaths['disks'][$disk] = $originalRoot;
 
             $finalPrefix = $originalRoot
-                    ? rtrim($originalRoot, '/') . '/' . $suffix
+                    ? rtrim($originalRoot, '/').'/'.$suffix
                     : $suffix;
 
             $this->app['config']["filesystems.disks.$disk.root"] = $finalPrefix;
@@ -65,7 +66,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
         Storage::forgetDisk(config('multitenancy.filesystems_disks'));
         // Storage facade
         foreach (config('multitenancy.filesystems_disks') as $disk) {
-            if (!$this->canSuffixS3Driver($disk) || !array_key_exists($disk, $this->originalPaths['disks'])) {
+            if (! $this->canSuffixS3Driver($disk) || ! array_key_exists($disk, $this->originalPaths['disks'])) {
                 continue;
             }
 

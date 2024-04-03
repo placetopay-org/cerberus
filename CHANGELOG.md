@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.3 (2023-04-03)](https://github.com/placetopay-org/cerberus/compare/3.0.2...3.0.3)
+
+### Added
+
+- `eduarguz/shift-php-cs` package.
+
+### Changed
+
+- Update `friendsofphp/php-cs-fixer` package to version 3.0
+- Add return type `int` to `TenantAware.execute`
+
 ## [3.0.2 (2023-10-11)](https://github.com/placetopay-org/cerberus/compare/3.0.1...3.0.2)
 
 ### Changed

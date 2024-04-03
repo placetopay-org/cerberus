@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Broadcasting\BroadcastEvent;
-use Illuminate\Encryption\Encrypter;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;

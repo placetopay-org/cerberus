@@ -22,11 +22,11 @@ class TenantsArtisanCommand extends TenantsArtisanParentCommand
      */
     public function handle()
     {
-        if (!$artisanCommand = $this->argument('artisanCommand')) {
+        if (! $artisanCommand = $this->argument('artisanCommand')) {
             $artisanCommand = $this->ask('Which artisan command do you want to run for all tenants?');
         }
 
-        if (!$this->option('no-slashes')) {
+        if (! $this->option('no-slashes')) {
             $artisanCommand = addslashes($artisanCommand);
         }
 

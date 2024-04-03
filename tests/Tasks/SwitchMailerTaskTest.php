@@ -18,7 +18,7 @@ class SwitchMailerTaskTest extends TestCase
             'name' => 'tenant_1',
             'config' => [
                 'mail' => [
-                    'default' => "array"
+                    'default' => 'array',
                 ],
             ],
         ]);
@@ -28,7 +28,7 @@ class SwitchMailerTaskTest extends TestCase
             'name' => 'tenant_2',
             'config' => [
                 'mail' => [
-                    'default' => "log"
+                    'default' => 'log',
                 ],
             ],
         ]);

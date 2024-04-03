@@ -55,7 +55,7 @@ class TenantAwareCommandTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id);
+            ->expectsOutput('Tenant ID is '.$this->tenant->id);
     }
 
     /** @test */
@@ -64,7 +64,7 @@ class TenantAwareCommandTest extends TestCase
         $this
             ->artisan('tenant:noop')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
-            ->expectsOutput('Tenant ID is ' . $this->anotherTenant->id);
+            ->expectsOutput('Tenant ID is '.$this->tenant->id)
+            ->expectsOutput('Tenant ID is '.$this->anotherTenant->id);
     }
 }

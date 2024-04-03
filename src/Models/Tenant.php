@@ -35,6 +35,7 @@ class Tenant extends TenantSpatie
     public function translate(string $key): string
     {
         $locale = $this->normalizeLocale($key);
+
         return $this->getTranslations($key)[$locale] ?? '';
     }
 
@@ -56,7 +57,7 @@ class Tenant extends TenantSpatie
             return $this->shortLocale($locale);
         }
 
-        if (!is_null(app()->getFallbackLocale())) {
+        if (! is_null(app()->getFallbackLocale())) {
             return app()->getFallbackLocale();
         }
 

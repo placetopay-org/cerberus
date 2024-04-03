@@ -16,13 +16,13 @@ class TenantTest extends TestCase
         parent::setUp();
 
         $config = [
-           'tenant' => [
-               'terms_and_privacy' => [
-                   'es_CO' => 'terminos y condiciones',
-                   'en' => 'terms and conditions',
-                   'es_CL' => 'terminos y condiciones chile',
-               ],
-           ],
+            'tenant' => [
+                'terms_and_privacy' => [
+                    'es_CO' => 'terminos y condiciones',
+                    'en' => 'terms and conditions',
+                    'es_CL' => 'terminos y condiciones chile',
+                ],
+            ],
             'app' => [
                 'locales' => [
                     'es',

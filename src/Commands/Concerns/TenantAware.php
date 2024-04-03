@@ -14,7 +14,7 @@ trait TenantAware
     use UsesMultitenancyConfig,
         UsesTenantModel;
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tenant = Arr::wrap($this->option('tenant'));
         if (empty($tenant)) {
@@ -34,7 +34,7 @@ trait TenantAware
         }
 
         return $tenants
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int)$this->laravel->call([$this, 'handle'])))
+            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
 }
