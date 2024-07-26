@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Ignore matches `/index.php` in domain tenant finder. A bad domain was generated with a URL as `{my-tenant}/index.php`.  
+
 ## [3.0.3 (2023-04-03)](https://github.com/placetopay-org/cerberus/compare/3.0.2...3.0.3)
 
 ### Added

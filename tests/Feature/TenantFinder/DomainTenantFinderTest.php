@@ -52,19 +52,47 @@ class DomainTenantFinderTest extends TestCase
         $this->assertNull($this->tenantFinder->findForRequest($request));
     }
 
-    /** @test */
-    public function it_can_find_a_tenant_for_domain_with_path()
-    {
-        $tenant = factory(Tenant::class)->create([
+    /**
+     * @dataProvider tenantWithPathProvider
+     * @test
+     */
+    public function it_can_find_a_tenant_for_domain_with_path(
+        string $tenantDomain,
+        string $requestUrl,
+        array $requestOptions
+    ): void {
+        $registeredTenant = factory(Tenant::class)->create([
             'app' => config('multitenancy.identifier'),
-            'domain' => 'my-domain.com/my-path',
+            'domain' => $tenantDomain,
         ]);
 
-        $request = Request::create('http://my-domain.com/my-path/login', 'GET', [], [], [], [
-            'SCRIPT_FILENAME' => 'my-path',
-            'SCRIPT_NAME' => 'my-path',
-        ]);
+        $request = Request::create($requestUrl, 'GET', [], [], [], $requestOptions);
 
-        $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
+        $foundTenant = $this->tenantFinder->findForRequest($request);
+
+        $this->assertInstanceOf(Tenant::class, $foundTenant);
+        $this->assertEquals($registeredTenant->id, $foundTenant->id);
+    }
+
+    public static function tenantWithPathProvider(): array
+    {
+        return [
+            'Registered tenant with path' => [
+                'my-domain.com/my-path',
+                'http://my-domain.com/my-path/login',
+                [
+                    'SCRIPT_FILENAME' => 'my-path',
+                    'SCRIPT_NAME' => 'my-path',
+                ],
+            ],
+            'Registered tenant without path and resolve request with Laravel front controller' => [
+                'my-domain.com',
+                'http://my-domain.com/index.php',
+                [
+                    'SCRIPT_FILENAME' => 'index.php',
+                    'SCRIPT_NAME' => 'index',
+                ],
+            ],
+        ];
     }
 }
