@@ -15,7 +15,7 @@ class DomainTenantFinder extends TenantFinder
 
     public function findForRequest(Request $request): ?Tenant
     {
-        $domain = $request->getHost().$request->getBaseUrl();
+        $domain = $request->getHost().str_replace('/index.php', '', $request->getBaseUrl());
         $vanityUrl = $_ENV['APP_VANITY_URL'] ?? '';
 
         if ('https://'.$domain === $vanityUrl) {
