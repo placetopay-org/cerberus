@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.0.4 (2023-07-30)](https://github.com/placetopay-org/cerberus/compare/3.0.3...3.0.4)
+## [3.0.4 (2024-07-30)](https://github.com/placetopay-org/cerberus/compare/3.0.3...3.0.4)
 
 ### Fixed
 
