@@ -74,4 +74,41 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertEquals($originalStoragePath, storage_path());
         $this->assertStringNotContainsString($this->tenant->name, $originalStoragePath);
     }
+
+    /**
+     * @test
+     * @dataProvider filesystemDisksUrlDataProvider
+     */
+    public function it_overwrite_filesystem_disks_url($appUrl, $storageUrl, $expectedUrl)
+    {
+        $config = array_merge($this->tenant->config, ['app' => ['url' => $appUrl]]);
+        $this->tenant->update(['config' => $config]);
+
+        $disks = [
+            'local' => ['driver' => 'local', 'url' => $storageUrl, 'root' => 'fake/storage'],
+            'public' => ['driver' => 'local', 'url' => $storageUrl, 'root' => 'fake/storage'],
+        ];
+
+        config()->set('filesystems.disks', $disks);
+        $this->tenant->makeCurrent();
+
+        $this->assertSame($expectedUrl, Storage::disk('local')->url(''));
+        $this->assertSame($expectedUrl, Storage::disk('public')->url(''));
+    }
+
+    public static function filesystemDisksUrlDataProvider(): array
+    {
+        return [
+            'tenant_without_trailing_slash' => [
+                'app_url' => 'https://tenant.test',
+                'storage_url' => 'https://tenant_1.test/storage',
+                'expected_url' => 'https://tenant.test/storage/tenants/tenant_1/',
+            ],
+            'tenant_with_trailing_slash' => [
+                'app_url' => 'https://tenant_2.test/',
+                'storage_url' => 'https://tenant_2.test/storage/',
+                'expected_url' => 'https://tenant_2.test/storage/tenants/tenant_1/',
+            ],
+        ];
+    }
 }
