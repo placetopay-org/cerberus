@@ -96,6 +96,26 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertSame($expectedUrl, Storage::disk('public')->url(''));
     }
 
+    /** @test */
+    public function it_forget_filesystem_disk_url_suffix()
+    {
+        $originalAppUrl = 'https://tenant.test';
+        $config = array_merge($this->tenant->config, ['app' => ['url' => $originalAppUrl]]);
+        $originalDiskUrl = $originalAppUrl.'/storage/';
+        $this->tenant->update(['config' => $config]);
+        $disks = [
+            'public' => ['driver' => 'local', 'url' => $originalDiskUrl, 'root' => 'fake/storage'],
+        ];
+        config()->set('filesystems.disks', $disks);
+        $this->tenant->makeCurrent();
+
+        $this->assertSame('https://tenant.test/storage/tenants/tenant_1/', Storage::disk('public')->url(''));
+
+        /** Forget current tenant */
+        $this->tenant->forget();
+        $this->assertSame($originalDiskUrl, Storage::disk('public')->url(''));
+    }
+
     public static function filesystemDisksUrlDataProvider(): array
     {
         return [

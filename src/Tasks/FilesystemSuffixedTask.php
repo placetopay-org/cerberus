@@ -82,6 +82,10 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
             $root = $this->originalPaths['disks'][$disk];
             $this->app['config']["filesystems.disks.$disk.root"] = $root;
+
+            if ($url = $this->originalPaths['disks'][$disk]['url'] ?? null) {
+                $this->app['config']["filesystems.disks.$disk.url"] = $url;
+            }
         }
     }
 
