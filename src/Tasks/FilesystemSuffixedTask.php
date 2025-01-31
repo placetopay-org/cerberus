@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Tasks;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
@@ -49,10 +50,19 @@ class FilesystemSuffixedTask implements SwitchTenantTask
             $this->originalPaths['disks'][$disk] = $originalRoot;
 
             $finalPrefix = $originalRoot
-                    ? rtrim($originalRoot, '/').'/'.$suffix
-                    : $suffix;
+                ? rtrim($originalRoot, '/').'/'.$suffix
+                : $suffix;
 
             $this->app['config']["filesystems.disks.$disk.root"] = $finalPrefix;
+
+            if ($originalDiskUrl = config("filesystems.disks.$disk.url")) {
+                $tenantConfigUrl = $tenant->getConfig()['app']['url'] ?? $this->app['config']['app']['url'];
+
+                $originalDiskUrl = Str::finish(ltrim(parse_url($originalDiskUrl, PHP_URL_PATH), '/'), '/');
+                $url = Str::finish($tenantConfigUrl, '/').$originalDiskUrl.$suffix;
+
+                $this->app['config']["filesystems.disks.$disk.url"] = $url;
+            }
         }
     }
 
@@ -72,6 +82,10 @@ class FilesystemSuffixedTask implements SwitchTenantTask
 
             $root = $this->originalPaths['disks'][$disk];
             $this->app['config']["filesystems.disks.$disk.root"] = $root;
+
+            if ($url = $this->originalPaths['disks'][$disk]['url'] ?? null) {
+                $this->app['config']["filesystems.disks.$disk.url"] = $url;
+            }
         }
     }
 
