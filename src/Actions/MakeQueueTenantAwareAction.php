@@ -9,13 +9,10 @@ use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
-use Spatie\Multitenancy\Models\Concerns\UsesTenantModel;
 use Spatie\Multitenancy\Models\Tenant;
 
 class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction
 {
-    use UsesTenantModel;
-
     public function execute(): void
     {
         $this

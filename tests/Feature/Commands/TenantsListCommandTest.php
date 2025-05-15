@@ -2,6 +2,7 @@
 
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -26,7 +27,7 @@ class TenantsListCommandTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_list_the_tenencies_of_the_app()
     {
         $this

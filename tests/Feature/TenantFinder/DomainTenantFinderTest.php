@@ -3,6 +3,8 @@
 namespace Placetopay\Cerberus\Tests\Feature\TenantFinder;
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Placetopay\Cerberus\Tests\TestCase;
@@ -18,7 +20,7 @@ class DomainTenantFinderTest extends TestCase
         $this->tenantFinder = new DomainTenantFinder();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_find_a_tenant_for_the_current_domain()
     {
         $tenant = factory(Tenant::class)->create([
@@ -31,7 +33,7 @@ class DomainTenantFinderTest extends TestCase
         $this->assertEquals($tenant->id, $this->tenantFinder->findForRequest($request)->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_null_if_there_are_no_tenants()
     {
         $request = Request::create('https://my-domain.com');
@@ -39,7 +41,7 @@ class DomainTenantFinderTest extends TestCase
         $this->assertNull($this->tenantFinder->findForRequest($request));
     }
 
-    /** @test */
+    #[Test]
     public function it_will_return_null_if_no_tenant_can_be_found_for_the_current_domain()
     {
         factory(Tenant::class)->create([
@@ -52,10 +54,8 @@ class DomainTenantFinderTest extends TestCase
         $this->assertNull($this->tenantFinder->findForRequest($request));
     }
 
-    /**
-     * @dataProvider tenantWithPathProvider
-     * @test
-     */
+    #[Test]
+    #[DataProvider('tenantWithPathProvider')]
     public function it_can_find_a_tenant_for_domain_with_path(
         string $tenantDomain,
         string $requestUrl,
