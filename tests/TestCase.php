@@ -3,8 +3,8 @@
 namespace Placetopay\Cerberus\Tests;
 
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenancyServiceProvider;
@@ -13,7 +13,7 @@ use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
 {
-    use WithLaravelMigrations;
+    use RefreshDatabase;
 
     public function setUp(): void
     {

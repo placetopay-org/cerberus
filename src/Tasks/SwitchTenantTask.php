@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Tasks;
 
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 use Spatie\Multitenancy\Models\Tenant;
 
@@ -22,7 +23,7 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
      * @param Tenant $tenant
      * @throws InvalidConfiguration
      */
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         $this->setConfig($tenant);
         $this->purgeConnectionDatabase();

@@ -9,15 +9,15 @@ Because it is a customization, it requires override steps mentioned below for pr
 This package aims to standardize the configuration of the ``tenants`` table of the landlord database, in addition to reducing the number of queries made to the same database by using cache.
 
 ## Prerequsites
-- `php8.0+`
-- `Laravel 8.0+`
+- `php8.2+`
+- `Laravel ^11.0|^12.0`
 
 ## Installation
 
 This package can be installed via composer:
 
 ``` bash
-composer require "placetopay/cerberus:^3.0"
+composer require "placetopay/cerberus:^4.0"
 ```
 
 ### Publishing the config file

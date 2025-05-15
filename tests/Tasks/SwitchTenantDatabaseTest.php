@@ -3,8 +3,10 @@
 namespace Placetopay\Cerberus\Tests\Tasks;
 
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\InvalidConfiguration;
 
 class SwitchTenantDatabaseTest extends TestCase
@@ -30,7 +32,7 @@ class SwitchTenantDatabaseTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function switch_fails_if_tenant_database_connection_name_equals_to_landlord_connection_name()
     {
         config()->set('multitenancy.tenant_database_connection_name', null);
@@ -40,7 +42,7 @@ class SwitchTenantDatabaseTest extends TestCase
         $this->tenant->makeCurrent();
     }
 
-    /** @test */
+    #[Test]
     public function when_making_a_tenant_current_it_will_perform_the_tasks()
     {
         $this->assertNull(DB::connection('tenant')->getDatabaseName());
@@ -53,7 +55,7 @@ class SwitchTenantDatabaseTest extends TestCase
 
         $this->assertEquals('laravel_mt_tenant_2', DB::connection('tenant')->getDatabaseName());
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
 
         $this->assertNull(DB::connection('tenant')->getDatabaseName());
     }

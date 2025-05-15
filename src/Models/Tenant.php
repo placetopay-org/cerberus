@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Models;
 
 use Placetopay\Cerberus\Scopes\AppScope;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
 
 /**
@@ -12,7 +13,7 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
  * @property string domain
  * @property array config
  */
-class Tenant extends TenantSpatie
+class Tenant extends TenantSpatie implements IsTenant
 {
     protected $fillable = ['config'];
 

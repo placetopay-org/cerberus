@@ -5,7 +5,7 @@ namespace Placetopay\Cerberus\Tasks;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class FilesystemSuffixedTask implements SwitchTenantTask
@@ -30,7 +30,7 @@ class FilesystemSuffixedTask implements SwitchTenantTask
         });
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         $suffix = "tenants/$tenant->name";
 
