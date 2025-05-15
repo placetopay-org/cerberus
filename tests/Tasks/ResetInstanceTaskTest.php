@@ -2,6 +2,7 @@
 
 namespace Placetopay\Cerberus\Tests\Tasks;
 
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -32,7 +33,7 @@ class ResetInstanceTaskTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_reset_encrypt_container_ok(): void
     {
         config()->set('multitenancy.forget_instances', ['encrypter']);

@@ -2,7 +2,7 @@
 
 namespace Placetopay\Cerberus\Tasks;
 
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class SwitchMailerTask implements SwitchTenantTask
@@ -14,7 +14,7 @@ class SwitchMailerTask implements SwitchTenantTask
         $this->originalDrive ??= config('mail.default');
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(IsTenant $tenant): void
     {
         app('mail.manager')->forgetMailers();
     }
