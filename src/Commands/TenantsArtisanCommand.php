@@ -5,10 +5,12 @@ namespace Placetopay\Cerberus\Commands;
 use Illuminate\Support\Facades\Artisan;
 use Placetopay\Cerberus\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand as TenantsArtisanParentCommand;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
 use Spatie\Multitenancy\Contracts\IsTenant;
 
 class TenantsArtisanCommand extends TenantsArtisanParentCommand
 {
+    use UsesMultitenancyConfig;
     use TenantAware;
 
     protected $signature = 'tenants:artisan {artisanCommand} {--tenant=*} {--no-slashes}';
