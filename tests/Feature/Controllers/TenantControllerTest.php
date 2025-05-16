@@ -21,7 +21,7 @@ class TenantControllerTest extends TestCase
 
         $signature = hash_hmac('sha256', json_encode($data), $key);
 
-        $tenant = factory(Tenant::class)->create([
+        $tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',

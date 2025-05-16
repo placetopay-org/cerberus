@@ -23,7 +23,7 @@ class DomainTenantFinderTest extends TestCase
     #[Test]
     public function it_can_find_a_tenant_for_the_current_domain()
     {
-        $tenant = factory(Tenant::class)->create([
+        $tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'domain' => 'my-domain.com',
         ]);
@@ -44,7 +44,7 @@ class DomainTenantFinderTest extends TestCase
     #[Test]
     public function it_will_return_null_if_no_tenant_can_be_found_for_the_current_domain()
     {
-        factory(Tenant::class)->create([
+        Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'domain' => 'my-domain.com',
         ]);
@@ -61,7 +61,7 @@ class DomainTenantFinderTest extends TestCase
         string $requestUrl,
         array $requestOptions
     ): void {
-        $registeredTenant = factory(Tenant::class)->create([
+        $registeredTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'domain' => $tenantDomain,
         ]);

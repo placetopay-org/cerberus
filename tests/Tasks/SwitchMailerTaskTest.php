@@ -16,19 +16,19 @@ class SwitchMailerTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => ['mail' => ['default' => 'array']],
         ]);
 
-        $this->smtpTenant = factory(Tenant::class)->create([
+        $this->smtpTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'config' => ['mail' => ['default' => 'smtp']],
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'config' => ['mail' => ['default' => 'log']],

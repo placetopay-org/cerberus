@@ -33,7 +33,7 @@ class TenantTest extends TestCase
             ],
         ];
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => $config,

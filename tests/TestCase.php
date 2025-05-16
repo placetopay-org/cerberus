@@ -3,29 +3,29 @@
 namespace Placetopay\Cerberus\Tests;
 
 use Illuminate\Console\Application as Artisan;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
-use Orchestra\Testbench\TestCase as Orchestra;
-use Placetopay\Cerberus\Models\Tenant;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Event;
+use Orchestra\Testbench\Concerns\CreatesApplication;
 use Placetopay\Cerberus\TenancyServiceProvider;
 use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\EchoArgumentCommand;
 use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
+use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
+use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 
-abstract class TestCase extends Orchestra
+abstract class TestCase extends BaseTestCase
 {
-    use RefreshDatabase;
+    use CreatesApplication, DatabaseTransactions, UsesMultitenancyConfig;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__.'/database/factories');
+        Event::listen(MadeTenantCurrentEvent::class, function () {
+            $this->beginDatabaseTransaction();
+        });
 
         $this->migrateDb();
-
-        Tenant::truncate();
-
-        DB::table('jobs')->truncate();
     }
 
     protected function tearDown(): void
@@ -57,11 +57,12 @@ abstract class TestCase extends Orchestra
 
     protected function migrateDb(): self
     {
-        $landLordMigrationsPath = realpath(__DIR__.'/database/migrations/landlord');
-        $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
-
         $this
-            ->artisan("migrate --database=landlord --path={$landLordMigrationsPath} --realpath")
+            ->artisan('migrate', [
+                '--database' => 'landlord',
+                '--path' => base_path('database/migrations/landlord'),
+                '--realpath' => true,
+            ])
             ->assertExitCode(0);
 
         return $this;

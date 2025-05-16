@@ -27,7 +27,7 @@ class CacheTest extends TestCase
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',

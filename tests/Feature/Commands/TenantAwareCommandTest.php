@@ -22,7 +22,7 @@ class TenantAwareCommandTest extends TestCase
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
@@ -31,7 +31,7 @@ class TenantAwareCommandTest extends TestCase
 
         $this->tenant->makeCurrent();
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'domain' => 'pr.domain.com',
