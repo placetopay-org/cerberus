@@ -72,7 +72,7 @@ class Tenant extends TenantSpatie implements IsTenant
         return strtolower(substr($locale, 0, 2));
     }
 
-    protected static function newFactory(): Factory
+    protected static function newFactory()
     {
         return TenantFactory::new();
     }
