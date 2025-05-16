@@ -90,9 +90,10 @@ class MakeQueueTenantAwareActionTest extends TestCase
 
         dispatch(new NonTenantAwareJob());
 
-        $job = \DB::table('jobs')->latest('id')->count();
+        $tenantJob = \DB::table('jobs')->latest('id')->first();
+        $payload = json_decode($tenantJob->payload, true);
 
-        $this->assertSame(1, $job);
+        $this->assertArrayNotHasKey('tenantDomain', $payload);
 
         /*** Running Jobs */
         $this->artisan('queue:work', ['--once' => true])->assertExitCode(0);

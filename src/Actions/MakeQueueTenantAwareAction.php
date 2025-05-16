@@ -6,32 +6,32 @@ use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\Events\JobRetryRequested;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
+use ReflectionClass;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Exceptions\CurrentTenantCouldNotBeDeterminedInTenantAwareJob;
+use Spatie\Multitenancy\Jobs\NotTenantAware;
+use Spatie\Multitenancy\Jobs\TenantAware;
 
 class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction
 {
-    protected function listenForJobsBeingProcessed(): static
+    public function execute(): void
     {
-        app('events')->listen(JobProcessing::class, function (JobProcessing $event) {
-            if (! array_key_exists('tenantDomain', $event->job->payload())) {
-                return;
-            }
-
-            $this->findTenant($event)->makeCurrent();
-        });
-
-        return $this;
+        $this
+            ->listenForJobsBeingQueued()
+            ->listenForJobsBeingProcessed()
+            ->listenForJobsRetryRequested();
     }
 
-    protected function listenForJobsRetryRequested(): static
+    protected function listenForJobsBeingQueued(): static
     {
-        app('events')->listen(JobRetryRequested::class, function (JobRetryRequested $event) {
-            if (! array_key_exists('tenantDomain', $event->payload())) {
-                return;
+        app('queue')->createPayloadUsing(function ($connectionName, $queue, $payload) {
+            $queueable = $payload['data']['command'];
+
+            if (! $this->isQueueAware($queueable)) {
+                return [];
             }
 
-            $this->findTenant($event)->makeCurrent();
+            return ['tenantDomain' => app(IsTenant::class)::current()->domain];
         });
 
         return $this;
@@ -55,5 +55,28 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         }
 
         return $tenant;
+    }
+
+    private function isQueueAware(object $queueable): bool
+    {
+        $reflection = new ReflectionClass($this->getJobFromQueueable($queueable));
+
+        if ($reflection->implementsInterface(TenantAware::class)) {
+            return true;
+        }
+
+        if ($reflection->implementsInterface(NotTenantAware::class)) {
+            return false;
+        }
+
+        if (in_array($reflection->name, config('multitenancy.tenant_aware_jobs'))) {
+            return true;
+        }
+
+        if (in_array($reflection->name, config('multitenancy.not_tenant_aware_jobs'))) {
+            return false;
+        }
+
+        return config('multitenancy.queues_are_tenant_aware_by_default') === true;
     }
 }
