@@ -16,12 +16,13 @@ trait TenantAware
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $tenant = Arr::wrap($this->option('tenant'));
+
         if (empty($tenant)) {
             $tenant = app(IsTenant::class)::query()->pluck('domain')->toArray();
         }
 
         $tenants = collect($tenant)->map(
-            fn ($domain) => Cache::rememberForever("tenant_{$domain}", function () use ($domain) {
+            fn ($domain) => Cache::rememberForever("tenant_$domain", function () use ($domain) {
                 return app(IsTenant::class)::query()->whereDomain($domain)->first();
             })
         )->filter();
@@ -33,7 +34,7 @@ trait TenantAware
         }
 
         return $tenants
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
+            ->map(fn (IsTenant $tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
             ->sum();
     }
 }
