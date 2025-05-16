@@ -12,14 +12,14 @@ class TenantsListCommandTest extends TestCase
     {
         parent::setUp();
 
-        factory(Tenant::class)->create([
+        Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
-        factory(Tenant::class)->create([
+        Tenant::factory()->create([
             'app' => 'other',
             'name' => 'tenant_2',
             'domain' => 'pr.domain.com',

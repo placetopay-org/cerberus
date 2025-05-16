@@ -3,7 +3,7 @@
 namespace Placetopay\Cerberus\Tests;
 
 use Illuminate\Console\Application as Artisan;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Placetopay\Cerberus\Models\Tenant;
@@ -13,13 +13,13 @@ use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
 {
-    use RefreshDatabase;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__.'/database/factories');
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        );
 
         $this->migrateDb();
 
@@ -57,7 +57,7 @@ abstract class TestCase extends Orchestra
 
     protected function migrateDb(): self
     {
-        $landLordMigrationsPath = realpath(__DIR__.'/database/migrations/landlord');
+        $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
         $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this

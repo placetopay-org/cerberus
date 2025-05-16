@@ -21,8 +21,7 @@
     "require-dev": {
         "phpunit/phpunit": "^11.5",
         "orchestra/testbench": "^10.3",
-        "friendsofphp/php-cs-fixer": "^3.75",
-        "laravel/legacy-factories": "^1.0.4"
+        "friendsofphp/php-cs-fixer": "^3.75"
     },
     "autoload": {
         "psr-4": {
@@ -34,6 +33,7 @@
             "Placetopay\\Cerberus\\Tests\\": "tests"
         },
         "classmap": [
+            "database/factories",
             "tests/database/migrations/landlord"
         ]
     },

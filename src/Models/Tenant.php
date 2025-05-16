@@ -2,6 +2,8 @@
 
 namespace Placetopay\Cerberus\Models;
 
+use Database\Factories\TenantFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Placetopay\Cerberus\Scopes\AppScope;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
@@ -68,5 +70,10 @@ class Tenant extends TenantSpatie implements IsTenant
     private function shortLocale($locale): string
     {
         return strtolower(substr($locale, 0, 2));
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return TenantFactory::new();
     }
 }

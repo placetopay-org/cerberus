@@ -20,7 +20,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         config(['database.default' => 'tenant']);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
@@ -30,7 +30,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         Schema::connection('tenant')->dropIfExists('migrations');
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'domain' => 'pr.domain.com',

@@ -19,14 +19,14 @@ class TenantsSkeletonStorageCommandTest extends TestCase
 
         config()->set('multitenancy.suffix_storage_path', true);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'co',
             'domain' => 'co.domain.com',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'pr',
             'domain' => 'pr.domain.com',

@@ -19,13 +19,13 @@ class SwitchTenantDatabaseTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
