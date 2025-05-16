@@ -5,7 +5,7 @@ namespace Placetopay\Cerberus\Commands;
 use Illuminate\Support\Facades\Artisan;
 use Placetopay\Cerberus\Commands\Concerns\TenantAware;
 use Spatie\Multitenancy\Commands\TenantsArtisanCommand as TenantsArtisanParentCommand;
-use Spatie\Multitenancy\Models\Tenant;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class TenantsArtisanCommand extends TenantsArtisanParentCommand
 {
@@ -30,10 +30,10 @@ class TenantsArtisanCommand extends TenantsArtisanParentCommand
             $artisanCommand = addslashes($artisanCommand);
         }
 
-        $tenant = Tenant::current();
+        $tenant = app(IsTenant::class)::current();
 
         $this->line('');
-        $this->info("Running command for tenant `{$tenant->name}` (id: {$tenant->getKey()})...");
+        $this->info("Running command for tenant `$tenant->name` (id: {$tenant->getKey()})...");
         $this->line('---------------------------------------------------------');
 
         Artisan::call($artisanCommand, [], $this->output);
