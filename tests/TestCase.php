@@ -3,29 +3,29 @@
 namespace Placetopay\Cerberus\Tests;
 
 use Illuminate\Console\Application as Artisan;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Facades\Event;
-use Orchestra\Testbench\Concerns\CreatesApplication;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\DB;
+use Orchestra\Testbench\TestCase as Orchestra;
+use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenancyServiceProvider;
 use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\EchoArgumentCommand;
 use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
-use Spatie\Multitenancy\Concerns\UsesMultitenancyConfig;
-use Spatie\Multitenancy\Events\MadeTenantCurrentEvent;
 
-abstract class TestCase extends BaseTestCase
+abstract class TestCase extends Orchestra
 {
-    use CreatesApplication, DatabaseTransactions, UsesMultitenancyConfig;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        Event::listen(MadeTenantCurrentEvent::class, function () {
-            $this->beginDatabaseTransaction();
-        });
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        );
 
         $this->migrateDb();
+
+        Tenant::truncate();
+
+        DB::table('jobs')->truncate();
     }
 
     protected function tearDown(): void
@@ -57,12 +57,11 @@ abstract class TestCase extends BaseTestCase
 
     protected function migrateDb(): self
     {
+        $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
+        $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
+
         $this
-            ->artisan('migrate', [
-                '--database' => 'landlord',
-                '--path' => base_path('database/migrations/landlord'),
-                '--realpath' => true,
-            ])
+            ->artisan("migrate --database=landlord --path={$landLordMigrationsPath} --realpath")
             ->assertExitCode(0);
 
         return $this;
