@@ -4,6 +4,7 @@ namespace Placetopay\Cerberus\Models;
 
 use Database\Factories\TenantFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Placetopay\Cerberus\Scopes\AppScope;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
@@ -17,6 +18,11 @@ use Spatie\Multitenancy\Models\Tenant as TenantSpatie;
  */
 class Tenant extends TenantSpatie implements IsTenant
 {
+    /**
+     * @template TFactory of Factory
+     */
+    use HasFactory;
+
     protected $fillable = ['config'];
 
     protected $casts = [
@@ -72,7 +78,12 @@ class Tenant extends TenantSpatie implements IsTenant
         return strtolower(substr($locale, 0, 2));
     }
 
-    protected static function newFactory(): Factory
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return TenantFactory
+     */
+    protected static function newFactory()
     {
         return TenantFactory::new();
     }
