@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1 (2025-05-16)](https://github.com/placetopay-org/cerberus/compare/4.0.1...4.0.0)
+
+### Changed
+- Moved return type declaration of `Tenant::newFactory()` to PHPDoc for proper type hinting.
+
 ## [4.0.0 (2025-05-16)](https://github.com/placetopay-org/cerberus/compare/4.0.0...3.0.5)
 
 ### Changed
