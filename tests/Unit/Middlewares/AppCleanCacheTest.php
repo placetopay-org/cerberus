@@ -3,13 +3,14 @@
 namespace Placetopay\Cerberus\Tests\Unit\Middlewares;
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Http\Exceptions\UnAuthorizedActionException;
 use Placetopay\Cerberus\Http\Middlewares\AppCleanCache;
 use Placetopay\Cerberus\Tests\TestCase;
 
 class AppCleanCacheTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function conf_key_is_not_configured()
     {
         $signature = $this->getSignature('');
@@ -22,7 +23,7 @@ class AppCleanCacheTest extends TestCase
         $middleware->handle($request, fn ($request) => $request);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_not_authenticate()
     {
         $signature = $this->getSignature('app-key123234');

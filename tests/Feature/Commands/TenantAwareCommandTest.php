@@ -2,9 +2,11 @@
 
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\Tests\TestCase;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class TenantAwareCommandTest extends TestCase
 {
@@ -20,7 +22,7 @@ class TenantAwareCommandTest extends TestCase
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
@@ -29,7 +31,7 @@ class TenantAwareCommandTest extends TestCase
 
         $this->tenant->makeCurrent();
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'domain' => 'pr.domain.com',
@@ -37,10 +39,10 @@ class TenantAwareCommandTest extends TestCase
         ]);
         $this->anotherTenant->makeCurrent();
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_with_a_not_existent_tenant()
     {
         $this
@@ -49,7 +51,7 @@ class TenantAwareCommandTest extends TestCase
             ->expectsOutput('No tenant(s) found.');
     }
 
-    /** @test */
+    #[Test]
     public function it_prints_the_right_tenant()
     {
         $this
@@ -58,7 +60,7 @@ class TenantAwareCommandTest extends TestCase
             ->expectsOutput('Tenant ID is '.$this->tenant->id);
     }
 
-    /** @test */
+    #[Test]
     public function it_works_with_no_tenant_parameters()
     {
         $this

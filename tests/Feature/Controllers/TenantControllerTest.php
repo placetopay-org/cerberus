@@ -3,12 +3,13 @@
 namespace Placetopay\Cerberus\Tests\Feature\Controllers;
 
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
 class TenantControllerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_access_to_clean_cache_ok()
     {
         $key = 'app-key123234';
@@ -20,7 +21,7 @@ class TenantControllerTest extends TestCase
 
         $signature = hash_hmac('sha256', json_encode($data), $key);
 
-        $tenant = factory(Tenant::class)->create([
+        $tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',

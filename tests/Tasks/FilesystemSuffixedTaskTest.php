@@ -3,6 +3,8 @@
 namespace Placetopay\Cerberus\Tests\Tasks;
 
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -16,20 +18,20 @@ class FilesystemSuffixedTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'config' => $this->getConfigStructure('laravel_mt_tenant_2'),
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_set_suffix_by_tenant_ok()
     {
         $originalStoragePath = Storage::path('tests');
@@ -43,7 +45,7 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertStringContainsString($this->anotherTenant->name, Storage::path('tests'));
     }
 
-    /** @test */
+    #[Test]
     public function it_forget_suffix_by_tenant_ok()
     {
         $this->tenant->makeCurrent();
@@ -59,7 +61,7 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertStringNotContainsString($this->anotherTenant->name, Storage::path('tests'));
     }
 
-    /** @test */
+    #[Test]
     public function it_overwrite_storage_path()
     {
         config()->set('multitenancy.suffix_storage_path', true);
@@ -75,10 +77,8 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertStringNotContainsString($this->tenant->name, $originalStoragePath);
     }
 
-    /**
-     * @test
-     * @dataProvider filesystemDisksUrlDataProvider
-     */
+    #[Test]
+    #[DataProvider('filesystemDisksUrlDataProvider')]
     public function it_overwrite_filesystem_disks_url($appUrl, $storageUrl, $expectedUrl)
     {
         $config = array_merge($this->tenant->config, ['app' => ['url' => $appUrl]]);
@@ -96,7 +96,7 @@ class FilesystemSuffixedTaskTest extends TestCase
         $this->assertSame($expectedUrl, Storage::disk('public')->url(''));
     }
 
-    /** @test */
+    #[Test]
     public function it_forget_filesystem_disk_url_suffix()
     {
         $originalAppUrl = 'https://tenant.test';
@@ -120,14 +120,14 @@ class FilesystemSuffixedTaskTest extends TestCase
     {
         return [
             'tenant_without_trailing_slash' => [
-                'app_url' => 'https://tenant.test',
-                'storage_url' => 'https://tenant_1.test/storage',
-                'expected_url' => 'https://tenant.test/storage/tenants/tenant_1/',
+                'appUrl' => 'https://tenant.test',
+                'storageUrl' => 'https://tenant_1.test/storage',
+                'expectedUrl' => 'https://tenant.test/storage/tenants/tenant_1/',
             ],
             'tenant_with_trailing_slash' => [
-                'app_url' => 'https://tenant_2.test/',
-                'storage_url' => 'https://tenant_2.test/storage/',
-                'expected_url' => 'https://tenant_2.test/storage/tenants/tenant_1/',
+                'appUrl' => 'https://tenant_2.test/',
+                'storageUrl' => 'https://tenant_2.test/storage/',
+                'expectedUrl' => 'https://tenant_2.test/storage/tenants/tenant_1/',
             ],
         ];
     }

@@ -3,8 +3,10 @@
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class TenantsArtisanCommandTest extends TestCase
 {
@@ -18,7 +20,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         config(['database.default' => 'tenant']);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
@@ -28,7 +30,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         Schema::connection('tenant')->dropIfExists('migrations');
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'domain' => 'pr.domain.com',
@@ -37,10 +39,10 @@ class TenantsArtisanCommandTest extends TestCase
         $this->anotherTenant->makeCurrent();
         Schema::connection('tenant')->dropIfExists('migrations');
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_migrate_all_tenant_databases()
     {
         $this
@@ -52,7 +54,7 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_migrate_a_specific_tenant()
     {
         $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->domain.'"')
@@ -63,14 +65,14 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
-    /** @test */
+    #[Test]
     public function it_cant_migrate_a_specific_tenant_id_when_search_by_domain()
     {
         $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->name.'"')
             ->expectsOutput('No tenant(s) found.');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_migrate_a_specific_tenant_by_domain()
     {
         $this->artisan('tenants:artisan migrate --tenant="'.$this->anotherTenant->domain.'"')
@@ -81,7 +83,7 @@ class TenantsArtisanCommandTest extends TestCase
             ->assertTenantDatabaseHasTable($this->anotherTenant, 'migrations');
     }
 
-    /** @test */
+    #[Test]
     public function it_works_with_parameters_that_contain_spaces()
     {
         $this->artisan('tenants:artisan "echo:argument hello" --no-slashes --tenant="'.$this->anotherTenant->domain.'"')
@@ -117,7 +119,7 @@ class TenantsArtisanCommandTest extends TestCase
 
         $tenantHasDatabaseTable = Schema::connection('tenant')->hasTable($tableName);
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
 
         return $tenantHasDatabaseTable;
     }

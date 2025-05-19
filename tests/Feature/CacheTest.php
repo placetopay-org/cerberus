@@ -4,10 +4,12 @@ namespace Placetopay\Cerberus\Tests\Feature;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tasks\SwitchTenantTask;
 use Placetopay\Cerberus\TenantFinder\DomainTenantFinder;
 use Placetopay\Cerberus\Tests\TestCase;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
 class CacheTest extends TestCase
 {
@@ -25,7 +27,7 @@ class CacheTest extends TestCase
 
         config()->set('multitenancy.switch_tenant_tasks', [SwitchTenantTask::class]);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'domain' => 'co.domain.com',
@@ -34,10 +36,10 @@ class CacheTest extends TestCase
 
         $this->tenant->makeCurrent();
 
-        Tenant::forgetCurrent();
+        app(IsTenant::class)::forgetCurrent();
     }
 
-    /** @test */
+    #[Test]
     public function it_print_the_correct_tenant_checking_cache()
     {
         $this
@@ -57,7 +59,7 @@ class CacheTest extends TestCase
             ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_find_a_tenant_for_the_current_domain_checking_cache()
     {
         $request = Request::create(sprintf('https://%s', $this->tenant->domain));
@@ -71,7 +73,7 @@ class CacheTest extends TestCase
         $this->assertEquals($this->tenant->config, $this->tenantFinder->findForRequest($request)->config);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_cache_domain_via_tenant_finder()
     {
         $request = Request::create(sprintf('https://%s', $this->tenant->domain));
@@ -89,7 +91,7 @@ class CacheTest extends TestCase
             ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_cache_domain_via_tenant_aware()
     {
         $this

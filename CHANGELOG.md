@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0 (2025-05-16)](https://github.com/placetopay-org/cerberus/compare/4.0.0...3.0.5)
+
+### Changed
+
+- Upgrades runtime to php `8.2`
+- Upgrade the `spatie/laravel-multitenancy` package to version `4.0.x`.
+- Upgrade the `phpUnit` package to version `11.5.x`.
+- Upgrade `orchestra/testbench` to version `10.3.x`,
+- Upgrade `friendsofphp/php-cs-fixer` to version `3.75.x`,
+- Removes  `laravel/legacy-factories`
+
 ## [3.0.5 (2025-01-31)](https://github.com/placetopay-org/cerberus/compare/3.0.5...3.0.4)
 
 ### Fixed:

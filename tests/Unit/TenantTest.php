@@ -2,6 +2,7 @@
 
 namespace Placetopay\Cerberus\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -32,7 +33,7 @@ class TenantTest extends TestCase
             ],
         ];
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => $config,
@@ -41,7 +42,7 @@ class TenantTest extends TestCase
         config()->set('app.fallback_locale', 'es_CL');
     }
 
-    /** @test */
+    #[Test]
     public function it_return_translation_by_local()
     {
         config()->set('app.locale', 'es_CO');
@@ -53,7 +54,7 @@ class TenantTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_return_translation_by_short()
     {
         config()->set('app.locale', 'en_US');
@@ -65,7 +66,7 @@ class TenantTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_translation_by_fallback()
     {
         config()->set('app.locale', null);
@@ -78,7 +79,7 @@ class TenantTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_return_empty_if_does_not_exist()
     {
         config()->set('app.locale', null);
@@ -89,7 +90,7 @@ class TenantTest extends TestCase
         $this->assertEmpty(app('currentTenant')->translate('terms_and_privacy'));
     }
 
-    /** @test */
+    #[Test]
     public function overwrite_array_keys_config_values_successfully(): void
     {
         config()->set('app.locales', ['en', 'es', 'fr', 'it', 'pt']);

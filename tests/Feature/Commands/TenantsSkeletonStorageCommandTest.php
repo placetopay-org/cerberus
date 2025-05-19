@@ -3,6 +3,7 @@
 namespace Placetopay\Cerberus\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -18,14 +19,14 @@ class TenantsSkeletonStorageCommandTest extends TestCase
 
         config()->set('multitenancy.suffix_storage_path', true);
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'co',
             'domain' => 'co.domain.com',
             'config' => $this->getConfigStructure('laravel_mt_tenant_1'),
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'pr',
             'domain' => 'pr.domain.com',
@@ -35,7 +36,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
         File::deleteDirectory(storage_path('tenants'));
     }
 
-    /** @test */
+    #[Test]
     public function it_create_the_folder_for_the_correct_tenant()
     {
         $path = storage_path('tenants/co/app/public');
@@ -48,7 +49,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
         $this->assertTrue(File::exists($path));
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_with_a_not_existent_tenant()
     {
         $this
@@ -57,7 +58,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
             ->expectsOutput('No tenant(s) found.');
     }
 
-    /** @test */
+    #[Test]
     public function it_works_with_no_tenant_parameters()
     {
         $coPath = storage_path('tenants/co/app/public');
@@ -73,7 +74,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
         $this->assertTrue(File::exists($prPath));
     }
 
-    /** @test */
+    #[Test]
     public function it_fails_creating_folders_if_the_option_is_not_enabled()
     {
         config()->set('multitenancy.suffix_storage_path', false);
@@ -84,7 +85,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
             ->expectsOutput('Storage tenancies are not enabled.');
     }
 
-    /** @test */
+    #[Test]
     public function fails_to_create_existing_folders()
     {
         $path = storage_path('tenants/co/app/public');

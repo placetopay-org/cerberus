@@ -3,8 +3,8 @@
 namespace Placetopay\Cerberus\Tests;
 
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
-use Orchestra\Testbench\Concerns\WithLaravelMigrations;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\TenancyServiceProvider;
@@ -13,13 +13,13 @@ use Placetopay\Cerberus\Tests\Feature\Commands\TestClasses\TenantNoopCommand;
 
 abstract class TestCase extends Orchestra
 {
-    use WithLaravelMigrations;
-
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->withFactories(__DIR__.'/database/factories');
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+        );
 
         $this->migrateDb();
 
@@ -57,7 +57,7 @@ abstract class TestCase extends Orchestra
 
     protected function migrateDb(): self
     {
-        $landLordMigrationsPath = realpath(__DIR__.'/database/migrations/landlord');
+        $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
         $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this

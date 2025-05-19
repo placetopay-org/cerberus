@@ -2,6 +2,7 @@
 
 namespace Placetopay\Cerberus\Tests\Tasks;
 
+use PHPUnit\Framework\Attributes\Test;
 use Placetopay\Cerberus\Models\Tenant;
 use Placetopay\Cerberus\Tests\TestCase;
 
@@ -11,7 +12,7 @@ class ResetInstanceTaskTest extends TestCase
     {
         parent::setUp();
 
-        $this->tenant = factory(Tenant::class)->create([
+        $this->tenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_1',
             'config' => [
@@ -21,7 +22,7 @@ class ResetInstanceTaskTest extends TestCase
             ],
         ]);
 
-        $this->anotherTenant = factory(Tenant::class)->create([
+        $this->anotherTenant = Tenant::factory()->create([
             'app' => config('multitenancy.identifier'),
             'name' => 'tenant_2',
             'config' => [
@@ -32,7 +33,7 @@ class ResetInstanceTaskTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_reset_encrypt_container_ok(): void
     {
         config()->set('multitenancy.forget_instances', ['encrypter']);
