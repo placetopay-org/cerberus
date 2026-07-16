@@ -43,7 +43,7 @@ class AppCleanCache
     /**
      * @throws UnAuthorizedActionException
      */
-    private function unAuthorized(string $message = null)
+    private function unAuthorized(?string $message = null)
     {
         throw new UnAuthorizedActionException($message ?? self::UN_AUTHORIZED, 401);
     }
