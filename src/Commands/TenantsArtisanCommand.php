@@ -17,8 +17,6 @@ class TenantsArtisanCommand extends TenantsArtisanParentCommand
      * This is meant to be a copy of the parent command except for the `--no-slashes` option, which allows
      * me to send parameters that have many spaces in its arguments and the consumer will be responsible
      * for adding the slashes.
-     *
-     * @return void
      */
     public function handle(): void
     {
