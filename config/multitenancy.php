@@ -163,7 +163,7 @@ return [
     'middleware_key' => '',
 
     /**
-     * You can add the container to reset when switching a tenant
+     * You can add the container to reset when switching a tenant.
      */
     'forget_instances' => [
     ],

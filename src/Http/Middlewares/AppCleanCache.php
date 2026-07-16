@@ -18,11 +18,11 @@ class AppCleanCache
 
     public function handle(Request $request, Closure $next)
     {
-        if (! config('multitenancy.middleware_key')) {
+        if (!config('multitenancy.middleware_key')) {
             $this->unAuthorized(self::EMPTY_CONFIG_KEY);
         }
 
-        if (! $this->canClearCache($request) || ! $this->allowedAction($request)) {
+        if (!$this->canClearCache($request) || !$this->allowedAction($request)) {
             $this->unAuthorized();
         }
 

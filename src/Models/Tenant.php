@@ -66,7 +66,7 @@ class Tenant extends TenantSpatie implements IsTenant
             return $this->shortLocale($locale);
         }
 
-        if (! is_null(app()->getFallbackLocale())) {
+        if (!is_null(app()->getFallbackLocale())) {
             return app()->getFallbackLocale();
         }
 

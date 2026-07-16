@@ -101,7 +101,7 @@ class FilesystemSuffixedTaskTest extends TestCase
     {
         $originalAppUrl = 'https://tenant.test';
         $config = array_merge($this->tenant->config, ['app' => ['url' => $originalAppUrl]]);
-        $originalDiskUrl = $originalAppUrl.'/storage/';
+        $originalDiskUrl = $originalAppUrl . '/storage/';
         $this->tenant->update(['config' => $config]);
         $disks = [
             'public' => ['driver' => 'local', 'url' => $originalDiskUrl, 'root' => 'fake/storage'],
