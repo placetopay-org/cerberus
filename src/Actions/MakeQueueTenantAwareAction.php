@@ -89,7 +89,7 @@ class MakeQueueTenantAwareAction extends \Spatie\Multitenancy\Actions\MakeQueueT
         }
 
         /** @var Tenant $tenant */
-        if (!$tenant = (new DomainTenantFinder())->getTenant($tenantDomain)) {
+        if (!$tenant = new DomainTenantFinder()->getTenant($tenantDomain)) {
             $event->job->delete();
 
             throw CurrentTenantCouldNotBeDeterminedInTenantAwareJob::noTenantFound($event);
