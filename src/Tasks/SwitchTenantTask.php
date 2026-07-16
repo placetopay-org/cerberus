@@ -76,7 +76,7 @@ class SwitchTenantTask implements \Spatie\Multitenancy\Tasks\SwitchTenantTask
         $results = [];
 
         foreach ($array as $key => $value) {
-            if (is_array($value) && !empty($value) && array_filter(array_keys($value), 'is_int') === []) {
+            if (is_array($value) && !empty($value) && array_filter(array_keys($value), is_int(...)) === []) {
                 $results = array_merge($results, $this->dot($value, $prepend . $key . '.'));
             } else {
                 $results[$prepend . $key] = $value;

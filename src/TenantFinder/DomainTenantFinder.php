@@ -24,10 +24,11 @@ class DomainTenantFinder extends TenantFinder
 
     public function getTenant($domain): ?IsTenant
     {
-        return Landlord::execute(function () use ($domain) {
-            return Cache::rememberForever("tenant_$domain", function () use ($domain) {
-                return app(IsTenant::class)::query()->whereDomain($domain)->first();
-            });
-        });
+        return Landlord::execute(
+            fn () => Cache::rememberForever(
+                "tenant_$domain",
+                fn () => app(IsTenant::class)::query()->whereDomain($domain)->first()
+            )
+        );
     }
 }
