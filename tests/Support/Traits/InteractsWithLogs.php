@@ -17,15 +17,13 @@ trait InteractsWithLogs
 
     protected function assertLogMessageContains(string $substring): void
     {
-        $logFound = collect($this->testLogHandler->getRecords())->contains(function ($record) use ($substring) {
-            return str_contains($record['message'], $substring);
-        });
+        $logFound = collect($this->testLogHandler->getRecords())->contains(fn ($record) => str_contains($record['message'], $substring));
 
         $this->assertTrue($logFound, "Expected log message containing '{$substring}' not found.");
     }
 
     protected function getAllLogMessages(): array
     {
-        return array_map(fn ($record) => $record['message'], $this->testLogHandler->getRecords());
+        return array_map(fn (array $record) => $record['message'], $this->testLogHandler->getRecords());
     }
 }

@@ -11,9 +11,9 @@ use Placetopay\Cerberus\Tests\TestCase;
 class AppCleanCacheTest extends TestCase
 {
     #[Test]
-    public function conf_key_is_not_configured()
+    public function conf_key_is_not_configured(): void
     {
-        $signature = $this->getSignature('');
+        $this->getSignature('');
 
         $request = new Request();
 
@@ -24,7 +24,7 @@ class AppCleanCacheTest extends TestCase
     }
 
     #[Test]
-    public function it_can_not_authenticate()
+    public function it_can_not_authenticate(): void
     {
         $signature = $this->getSignature('app-key123234');
 
@@ -37,7 +37,7 @@ class AppCleanCacheTest extends TestCase
         $middleware->handle($request, fn ($request) => $request);
     }
 
-    private function getSignature($key): string
+    private function getSignature(string $key): string
     {
         config(['multitenancy.middleware_key' => $key]);
 

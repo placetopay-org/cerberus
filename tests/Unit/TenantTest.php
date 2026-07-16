@@ -43,7 +43,7 @@ class TenantTest extends TestCase
     }
 
     #[Test]
-    public function it_return_translation_by_local()
+    public function it_return_translation_by_local(): void
     {
         config()->set('app.locale', 'es_CO');
         $this->tenant->makeCurrent();
@@ -55,7 +55,7 @@ class TenantTest extends TestCase
     }
 
     #[Test]
-    public function it_return_translation_by_short()
+    public function it_return_translation_by_short(): void
     {
         config()->set('app.locale', 'en_US');
         $this->tenant->makeCurrent();
@@ -67,9 +67,9 @@ class TenantTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_translation_by_fallback()
+    public function it_returns_translation_by_fallback(): void
     {
-        config()->set('app.locale', null);
+        config()->set('app.locale');
 
         $this->tenant->makeCurrent();
 
@@ -80,10 +80,10 @@ class TenantTest extends TestCase
     }
 
     #[Test]
-    public function it_return_empty_if_does_not_exist()
+    public function it_return_empty_if_does_not_exist(): void
     {
-        config()->set('app.locale', null);
-        config()->set('app.fallback_locale', null);
+        config()->set('app.locale');
+        config()->set('app.fallback_locale');
 
         $this->tenant->makeCurrent();
 

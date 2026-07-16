@@ -14,7 +14,7 @@ class TenantNoopCommand extends Command
 
     protected $description = 'Execute noop for tenant(s)';
 
-    public function handle()
+    public function handle(): void
     {
         $tenant = Tenant::current();
 
