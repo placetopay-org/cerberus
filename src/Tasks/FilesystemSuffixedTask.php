@@ -10,10 +10,13 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 class FilesystemSuffixedTask implements SwitchTenantTask
 {
+    private Application $app;
+
     private array $originalPaths;
 
-    public function __construct(private Application $app)
+    public function __construct(Application $app)
     {
+        $this->app = $app;
         $this->originalPaths = [
             'disks' => [],
             'storage' => $this->app->storagePath(),
