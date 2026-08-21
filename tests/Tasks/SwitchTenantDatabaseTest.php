@@ -33,9 +33,9 @@ class SwitchTenantDatabaseTest extends TestCase
     }
 
     #[Test]
-    public function switch_fails_if_tenant_database_connection_name_equals_to_landlord_connection_name()
+    public function switch_fails_if_tenant_database_connection_name_equals_to_landlord_connection_name(): void
     {
-        config()->set('multitenancy.tenant_database_connection_name', null);
+        config()->set('multitenancy.tenant_database_connection_name');
 
         $this->expectException(InvalidConfiguration::class);
 
@@ -43,7 +43,7 @@ class SwitchTenantDatabaseTest extends TestCase
     }
 
     #[Test]
-    public function when_making_a_tenant_current_it_will_perform_the_tasks()
+    public function when_making_a_tenant_current_it_will_perform_the_tasks(): void
     {
         $this->assertNull(DB::connection('tenant')->getDatabaseName());
 

@@ -10,7 +10,9 @@ use Spatie\Multitenancy\Jobs\NotTenantAware;
 
 class NonTenantAwareJob implements ShouldQueue, NotTenantAware
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public function handle()
     {

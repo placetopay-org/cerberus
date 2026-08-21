@@ -40,13 +40,13 @@ class CacheTest extends TestCase
     }
 
     #[Test]
-    public function it_print_the_correct_tenant_checking_cache()
+    public function it_print_the_correct_tenant_checking_cache(): void
     {
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id)
-            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
 
         $this->assertHasCache();
 
@@ -55,12 +55,12 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id)
-            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
     }
 
     #[Test]
-    public function it_can_find_a_tenant_for_the_current_domain_checking_cache()
+    public function it_can_find_a_tenant_for_the_current_domain_checking_cache(): void
     {
         $request = Request::create(sprintf('https://%s', $this->tenant->domain));
 
@@ -74,7 +74,7 @@ class CacheTest extends TestCase
     }
 
     #[Test]
-    public function it_can_cache_domain_via_tenant_finder()
+    public function it_can_cache_domain_via_tenant_finder(): void
     {
         $request = Request::create(sprintf('https://%s', $this->tenant->domain));
 
@@ -87,18 +87,18 @@ class CacheTest extends TestCase
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id)
-            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
     }
 
     #[Test]
-    public function it_can_cache_domain_via_tenant_aware()
+    public function it_can_cache_domain_via_tenant_aware(): void
     {
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id)
-            ->expectsOutput('Tenant Config is '.$this->tenant->getRawOriginal('config'));
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant Config is ' . $this->tenant->getRawOriginal('config'));
 
         $this->assertHasCache();
 

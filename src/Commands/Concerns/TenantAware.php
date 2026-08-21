@@ -21,9 +21,10 @@ trait TenantAware
         }
 
         $tenants = collect($tenant)->map(
-            fn ($domain) => Cache::rememberForever("tenant_{$domain}", function () use ($domain) {
-                return app(IsTenant::class)::query()->whereDomain($domain)->first();
-            })
+            fn ($domain) => Cache::rememberForever(
+                "tenant_$domain",
+                fn () => app(IsTenant::class)::query()->whereDomain($domain)->first()
+            )
         )->filter();
 
         if ($tenants->count() === 0) {
@@ -33,7 +34,7 @@ trait TenantAware
         }
 
         return $tenants
-            ->map(fn ($tenant) => $tenant->execute(fn () => (int) $this->laravel->call([$this, 'handle'])))
+            ->map(fn ($tenant) => $tenant->execute(fn () => (int)$this->laravel->call([$this, 'handle'])))
             ->sum();
     }
 }

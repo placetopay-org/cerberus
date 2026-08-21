@@ -18,7 +18,7 @@ abstract class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Spatie\\Multitenancy\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         $this->migrateDb();
@@ -43,7 +43,7 @@ abstract class TestCase extends Orchestra
         ];
     }
 
-    protected function bootCommands() : self
+    protected function bootCommands(): self
     {
         Artisan::starting(function ($artisan) {
             $artisan->resolveCommands([
@@ -57,7 +57,7 @@ abstract class TestCase extends Orchestra
 
     protected function migrateDb(): self
     {
-        $landLordMigrationsPath = realpath(__DIR__.'/database/migrations/landlord');
+        $landLordMigrationsPath = realpath(__DIR__ . '/database/migrations/landlord');
         $landLordMigrationsPath = str_replace('\\', '/', $landLordMigrationsPath);
 
         $this
