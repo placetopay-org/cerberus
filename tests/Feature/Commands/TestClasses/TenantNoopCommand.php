@@ -14,11 +14,11 @@ class TenantNoopCommand extends Command
 
     protected $description = 'Execute noop for tenant(s)';
 
-    public function handle()
+    public function handle(): void
     {
         $tenant = Tenant::current();
 
-        $this->line('Tenant ID is '.$tenant->id);
-        $this->line('Tenant Config is '.json_encode($tenant->config));
+        $this->line('Tenant ID is ' . $tenant->id);
+        $this->line('Tenant Config is ' . json_encode($tenant->config));
     }
 }

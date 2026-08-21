@@ -37,7 +37,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_create_the_folder_for_the_correct_tenant()
+    public function it_create_the_folder_for_the_correct_tenant(): void
     {
         $path = storage_path('tenants/co/app/public');
 
@@ -50,7 +50,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_fails_with_a_not_existent_tenant()
+    public function it_fails_with_a_not_existent_tenant(): void
     {
         $this
             ->artisan('tenants:skeleton-storage --tenant=unknown')
@@ -59,7 +59,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_works_with_no_tenant_parameters()
+    public function it_works_with_no_tenant_parameters(): void
     {
         $coPath = storage_path('tenants/co/app/public');
         $prPath = storage_path('tenants/pr/app/public');
@@ -75,7 +75,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_fails_creating_folders_if_the_option_is_not_enabled()
+    public function it_fails_creating_folders_if_the_option_is_not_enabled(): void
     {
         config()->set('multitenancy.suffix_storage_path', false);
 
@@ -86,7 +86,7 @@ class TenantsSkeletonStorageCommandTest extends TestCase
     }
 
     #[Test]
-    public function fails_to_create_existing_folders()
+    public function fails_to_create_existing_folders(): void
     {
         $path = storage_path('tenants/co/app/public');
 

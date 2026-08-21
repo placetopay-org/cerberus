@@ -33,7 +33,7 @@ class MakeQueueTenantAwareActionTest extends TestCase
     }
 
     #[Test]
-    public function it_processes_job_with_tenant_domain_and_sets_context()
+    public function it_processes_job_with_tenant_domain_and_sets_context(): void
     {
         $this->fakeLogs();
 
@@ -80,7 +80,7 @@ class MakeQueueTenantAwareActionTest extends TestCase
     }
 
     #[Test]
-    public function it_does_not_add_tenant_domain_if_job_is_not_tenant_aware()
+    public function it_does_not_add_tenant_domain_if_job_is_not_tenant_aware(): void
     {
         $this->fakeLogs();
 

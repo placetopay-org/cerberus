@@ -10,7 +10,7 @@ use Placetopay\Cerberus\Tests\TestCase;
 class TenantControllerTest extends TestCase
 {
     #[Test]
-    public function it_can_access_to_clean_cache_ok()
+    public function it_can_access_to_clean_cache_ok(): void
     {
         $key = 'app-key123234';
         config(['multitenancy.middleware_key' => $key]);

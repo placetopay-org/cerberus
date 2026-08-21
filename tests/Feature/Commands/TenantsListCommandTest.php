@@ -28,7 +28,7 @@ class TenantsListCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_can_list_the_tenencies_of_the_app()
+    public function it_can_list_the_tenancies_of_the_app(): void
     {
         $this
             ->artisan('tenants:list')

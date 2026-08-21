@@ -18,11 +18,11 @@ class AppCleanCache
 
     public function handle(Request $request, Closure $next)
     {
-        if (! config('multitenancy.middleware_key')) {
+        if (!config('multitenancy.middleware_key')) {
             $this->unAuthorized(self::EMPTY_CONFIG_KEY);
         }
 
-        if (! $this->canClearCache($request) || ! $this->allowedAction($request)) {
+        if (!$this->canClearCache($request) || !$this->allowedAction($request)) {
             $this->unAuthorized();
         }
 
@@ -43,7 +43,7 @@ class AppCleanCache
     /**
      * @throws UnAuthorizedActionException
      */
-    private function unAuthorized(string $message = null)
+    private function unAuthorized(?string $message = null)
     {
         throw new UnAuthorizedActionException($message ?? self::UN_AUTHORIZED, 401);
     }

@@ -10,7 +10,7 @@ class EchoArgumentCommand extends Command
 
     protected $description = 'Execute an echo command for testing arguments';
 
-    public function handle()
+    public function handle(): void
     {
         $this->line($this->argument('inputString'));
     }

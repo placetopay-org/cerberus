@@ -32,7 +32,7 @@ class FilesystemSuffixedTaskTest extends TestCase
     }
 
     #[Test]
-    public function it_set_suffix_by_tenant_ok()
+    public function it_set_suffix_by_tenant_ok(): void
     {
         $originalStoragePath = Storage::path('tests');
         $this->assertStringNotContainsString($this->tenant->name, $originalStoragePath);
@@ -46,7 +46,7 @@ class FilesystemSuffixedTaskTest extends TestCase
     }
 
     #[Test]
-    public function it_forget_suffix_by_tenant_ok()
+    public function it_forget_suffix_by_tenant_ok(): void
     {
         $this->tenant->makeCurrent();
         $this->assertStringContainsString($this->tenant->name, Storage::path('tests'));
@@ -62,7 +62,7 @@ class FilesystemSuffixedTaskTest extends TestCase
     }
 
     #[Test]
-    public function it_overwrite_storage_path()
+    public function it_overwrite_storage_path(): void
     {
         config()->set('multitenancy.suffix_storage_path', true);
         $originalStoragePath = storage_path();
@@ -79,7 +79,7 @@ class FilesystemSuffixedTaskTest extends TestCase
 
     #[Test]
     #[DataProvider('filesystemDisksUrlDataProvider')]
-    public function it_overwrite_filesystem_disks_url($appUrl, $storageUrl, $expectedUrl)
+    public function it_overwrite_filesystem_disks_url(string $appUrl, string $storageUrl, string $expectedUrl): void
     {
         $config = array_merge($this->tenant->config, ['app' => ['url' => $appUrl]]);
         $this->tenant->update(['config' => $config]);
@@ -97,11 +97,11 @@ class FilesystemSuffixedTaskTest extends TestCase
     }
 
     #[Test]
-    public function it_forget_filesystem_disk_url_suffix()
+    public function it_forget_filesystem_disk_url_suffix(): void
     {
         $originalAppUrl = 'https://tenant.test';
         $config = array_merge($this->tenant->config, ['app' => ['url' => $originalAppUrl]]);
-        $originalDiskUrl = $originalAppUrl.'/storage/';
+        $originalDiskUrl = $originalAppUrl . '/storage/';
         $this->tenant->update(['config' => $config]);
         $disks = [
             'public' => ['driver' => 'local', 'url' => $originalDiskUrl, 'root' => 'fake/storage'],

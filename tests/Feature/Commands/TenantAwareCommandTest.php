@@ -43,7 +43,7 @@ class TenantAwareCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_fails_with_a_not_existent_tenant()
+    public function it_fails_with_a_not_existent_tenant(): void
     {
         $this
             ->artisan('tenant:noop --tenant=unknown')
@@ -52,21 +52,21 @@ class TenantAwareCommandTest extends TestCase
     }
 
     #[Test]
-    public function it_prints_the_right_tenant()
+    public function it_prints_the_right_tenant(): void
     {
         $this
             ->artisan('tenant:noop --tenant=co.domain.com')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id);
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id);
     }
 
     #[Test]
-    public function it_works_with_no_tenant_parameters()
+    public function it_works_with_no_tenant_parameters(): void
     {
         $this
             ->artisan('tenant:noop')
             ->assertExitCode(0)
-            ->expectsOutput('Tenant ID is '.$this->tenant->id)
-            ->expectsOutput('Tenant ID is '.$this->anotherTenant->id);
+            ->expectsOutput('Tenant ID is ' . $this->tenant->id)
+            ->expectsOutput('Tenant ID is ' . $this->anotherTenant->id);
     }
 }
