@@ -45,7 +45,7 @@ class Tenant extends TenantSpatie implements IsTenant
     {
         $locale = $this->normalizeLocale($key);
 
-        return $this->getTranslations($key)[$locale] ?? '';
+        return $this->getTranslations($key)[$locale ?? ''] ?? '';
     }
 
     private function getTranslations(string $key): array
